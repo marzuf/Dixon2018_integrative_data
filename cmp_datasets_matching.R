@@ -110,19 +110,24 @@ stopifnot(length(lungCL2Files) > 0)
 lung2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lungCL2Files)))
 stopifnot(length(lung2_chromos) > 0)
 
+pipConsensusname <- "pipeline_TopDom"
+pipConsensusFold <- file.path(setDir, "/mnt/ed4/marie/TAD_call_pipeline_TopDom", "consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final")
+pipConsensusFiles <- list.files(pipConsensusFold, full.names=T, pattern = consensusPattern)
+pip_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(pipConsensusFiles)))
 
 intersectChromos <- Reduce(intersect, list(
-  breast_consensus_chromos, mcf7_consensus_chromos,
+  breast_consensus_chromos, mcf7_consensus_chromos, pip_consensus_chromos,
   lung_consensus_chromos,
   breast1_chromos, breast2_chromos, breast3_chromos,
   lung1_chromos, lung2_chromos
 ))
 
 all_ds <- c(
-  "breastConsensus", "mcf7Consensus", "lungConsensus",
+  "breastConsensus", "mcf7Consensus", "lungConsensus", "pipConsensus",
   "breastCL1", "breastCL2",
   "lungCL1", "lungCL2"
 )
+
 
 
 all_cmps1 <- combn(all_ds, m = 2)
@@ -446,8 +451,86 @@ for(curr_var in var_to_plot) {
     foo <- try(dev.off())
   }
   
+  tissue <- pipConsensusname
+  
+  consensus_dt <- all_match_dt[ (grepl(paste0(tissue), all_match_dt$ds1) | grepl(paste0(tissue), all_match_dt$ds2) ),]
+  # consensus_dt$newDS1 <- ifelse(consensus_dt$ds1 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
+  # consensus_dt$newDS2 <- ifelse(consensus_dt$ds2 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
+  consensus_dt$newDS1 <- ifelse(grepl(paste0(tissue), consensus_dt$ds1), consensus_dt$ds1, consensus_dt$ds2)
+  consensus_dt$newDS2 <- ifelse(grepl(paste0(tissue), consensus_dt$ds2), consensus_dt$ds1, consensus_dt$ds2)
+  
+  stopifnot(grepl(paste0(tissue), consensus_dt$newDS1))
+  stopifnot(!grepl(paste0(tissue), consensus_dt$newDS2))
+  
+  consensus_dt$comp <- paste0(consensus_dt$newDS1, "_", consensus_dt$newDS2)
+  stopifnot(sapply(seq_len(nrow(consensus_dt)),function(i) grepl(consensus_dt$ds1[i], consensus_dt$comp[i])))
+  stopifnot(sapply(seq_len(nrow(consensus_dt)),function(i) grepl(consensus_dt$ds2[i], consensus_dt$comp[i])))
+  
+  mean_consensus_dt <- aggregate(MoC ~ newDS1 + newDS2, FUN=mean, data = consensus_dt)
+  mean_consensus_dt <- mean_consensus_dt[order(mean_consensus_dt$MoC, decreasing = TRUE),]
+  consensus_dt$newDS2 <- factor(as.character(consensus_dt$newDS2), levels = mean_consensus_dt$newDS2)
+  consensus_dt$chromo <- factor(as.character(consensus_dt$chromo), levels = paste0("chr", c(1:22, "X")))
+  
+  stopifnot(!is.na(consensus_dt))
+  
+  p_common <- ggplot(consensus_dt, aes(x = newDS2, y = MoC)) + 
+    geom_boxplot(outlier.shape=NA) +
+    # geom_jitter(aes(colour = chromo)) +
+    scale_x_discrete(name="")+
+    # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
+    scale_y_continuous(name=paste0("MoC"),
+                       breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+    # coord_cartesian(expand = FALSE) +
+    # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
+    #                   labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"))+
+    # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
+    #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
+    labs(colour  = "") +
+    ggtitle(label = paste0(curr_var, " with ", tissue))+
+    theme( # Increase size of axis lines
+      # top, right, bottom and left
+      # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
+      plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+      plot.subtitle = element_text(hjust = 0.5, size=10),
+      panel.grid = element_blank(),
+      # panel.grid.major = element_line(colour = "lightpink"),
+      # strip.text.x = element_text(),
+      axis.text.x = element_text( hjust=1,vjust = 0.5, size=12, angle = 90),
+      axis.line.x = element_line(size = .2, color = "black"),
+      axis.line.y = element_line(size = .3, color = "black"),
+      #    axis.ticks.x = element_blank(),
+      axis.text.y = element_text(color="black", hjust=1,vjust = 0.5),
+      axis.title.y = element_text(color="black", size=12),
+      axis.title.x = element_text(color="black", size=12),
+      panel.border = element_blank(),
+      panel.background = element_rect(fill = "transparent"),
+      legend.background =  element_rect(),
+      legend.key = element_blank()
+      # axis.text.x=element_text(size=10, angle=90, vjust=0.5, hjust=1)
+    ) #+
+  # geom_hline(yintercept = 1, linetype = 2)
+  
+  if(SSHFS) p_all
+  
+  p_dot <- p_common +  geom_jitter(aes(colour = chromo))
+  if(SSHFS) p_dot
+  
+  p_txt <- p_common + geom_text(aes(label=chromo, colour=chromo, fontface="bold"),size=2.5, position = position_jitter(w = 0.3)) + guides(colour = "none")
+  if(SSHFS) p_txt
+  
+  outFile <- file.path(outFold, paste0(curr_var, "_matching_", tissue, "_consensus_boxplot_chromoDots.", plotType))
+  ggsave(plot=p_dot, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+  
+  outFile <- file.path(outFold, paste0(curr_var, "_matching_", tissue, "_consensus_boxplot_chromoLabs.", plotType))
+  ggsave(plot=p_txt, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+  
   
 }
+
+### add the same boxplot here for pipTopDomconsensus only !!!
+
 
 
 ######################################################################################

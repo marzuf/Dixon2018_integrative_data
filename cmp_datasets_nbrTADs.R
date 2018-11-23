@@ -106,18 +106,25 @@ lung2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lun
 stopifnot(length(lung2_chromos) > 0)
 
 
+pipConsensusname <- "pipeline_TopDom"
+pipConsensusFold <- file.path(setDir, "/mnt/ed4/marie/TAD_call_pipeline_TopDom", "consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final")
+pipConsensusFiles <- list.files(pipConsensusFold, full.names=T, pattern = consensusPattern)
+pip_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(pipConsensusFiles)))
+
 intersectChromos <- Reduce(intersect, list(
-  breast_consensus_chromos, mcf7_consensus_chromos,
+  breast_consensus_chromos, mcf7_consensus_chromos, pip_consensus_chromos,
   lung_consensus_chromos,
   breast1_chromos, breast2_chromos, breast3_chromos,
   lung1_chromos, lung2_chromos
 ))
 
 all_ds <- c(
-  "breastConsensus", "mcf7Consensus", "lungConsensus",
+  "breastConsensus", "mcf7Consensus", "lungConsensus", "pipConsensus",
   "breastCL1", "breastCL2",
   "lungCL1", "lungCL2"
 )
+
+
 
 i=1
 all_nbr_dt <- foreach(ds1 = all_ds, .combine="rbind") %dopar% {
@@ -153,6 +160,7 @@ all_nbr_dt <- foreach(ds1 = all_ds, .combine="rbind") %dopar% {
       ds1 = ds1,
       chromo = chromo,
       nTADs = nrow(dt1),
+      meanSizeTADs = mean(dt1$end - dt1$start + 1),
       stringsAsFactors = FALSE
     )
   }
@@ -166,66 +174,76 @@ cat(paste0("... written: ", outFile, "\n"))
 all_nbr_dt <- eval(parse(text = load(outFile)))
 stopifnot(nrow(all_nbr_dt) == (length(intersectChromos) * length(all_ds)))
 
-mean_all_nbr_dt <- aggregate(nTADs ~ ds1, FUN=mean, data = all_nbr_dt)
-mean_all_nbr_dt <- mean_all_nbr_dt[order(mean_all_nbr_dt$nTADs, decreasing = TRUE),]
-all_nbr_dt$ds1 <- factor(as.character(all_nbr_dt$ds1), levels = mean_all_nbr_dt$ds1)
 all_nbr_dt$chromo <- factor(as.character(all_nbr_dt$chromo), levels = paste0("chr", c(1:22, "X")))
 
 stopifnot(!is.na(all_nbr_dt))
 
-p_common <- ggplot(all_nbr_dt, aes(x = ds1, y = nTADs)) + 
-  geom_boxplot(outlier.shape=NA) +
-  # geom_jitter(aes(colour = chromo)) +
-  scale_x_discrete(name="")+
-  # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
-  scale_y_continuous(name=paste0("# TADs"),
-                     breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
-  # coord_cartesian(expand = FALSE) +
-  # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
-  #                   labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"))+
-  # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
-  #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
-  labs(colour  = "") +
-  ggtitle(label = paste0("# TADs"))+
-  theme( # Increase size of axis lines
-    # top, right, bottom and left
-    # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
-    plot.subtitle = element_text(hjust = 0.5, size=10),
-    panel.grid = element_blank(),
-    # panel.grid.major = element_line(colour = "lightpink"),
-    # strip.text.x = element_text(),
-    axis.text.x = element_text( hjust=1,vjust = 0.5, size=12, angle = 90),
-    axis.line.x = element_line(size = .2, color = "black"),
-    axis.line.y = element_line(size = .3, color = "black"),
-    #    axis.ticks.x = element_blank(),
-    axis.text.y = element_text(color="black", hjust=1,vjust = 0.5),
-    axis.title.y = element_text(color="black", size=12),
-    axis.title.x = element_text(color="black", size=12),
-    panel.border = element_blank(),
-    panel.background = element_rect(fill = "transparent"),
-    legend.background =  element_rect(),
-    legend.key = element_blank()
-    # axis.text.x=element_text(size=10, angle=90, vjust=0.5, hjust=1)
-  ) #+
-# geom_hline(yintercept = 1, linetype = 2)
+all_vars <- colnames(all_nbr_dt)[!colnames(all_nbr_dt) %in% c("ds1", "chromo")]
 
-if(SSHFS) p_all
-
-p_dot <- p_common +  geom_jitter(aes(colour = chromo))
-if(SSHFS) p_dot
-
-p_txt <- p_common + geom_text(aes(label=chromo, colour=chromo, fontface="bold"),size=2.5, position = position_jitter(w = 0.3)) + guides(colour = "none")
-if(SSHFS) p_txt
-
-
-outFile <- file.path(outFold, paste0("nbrTADs_boxplot_chromoDots.", plotType))
-ggsave(plot=p_dot, file = outFile, width = widthBoxplot, height = heightBoxplot)
-cat(paste0("... written: ", outFile, "\n"))
-
-outFile <- file.path(outFold, paste0("nbrTADs_boxplot_chromoLabs.", plotType))
-ggsave(plot=p_txt, file = outFile, width = widthBoxplot, height = heightBoxplot)
-cat(paste0("... written: ", outFile, "\n"))
+for(var_to_plot in all_vars) {
+  
+  
+  mean_all_nbr_dt <- aggregate(as.formula(paste0(var_to_plot, " ~ ds1")), FUN=mean, data = all_nbr_dt)
+  mean_all_nbr_dt <- mean_all_nbr_dt[order(mean_all_nbr_dt[, var_to_plot], decreasing = TRUE),]
+  all_nbr_dt$ds1 <- factor(as.character(all_nbr_dt$ds1), levels = mean_all_nbr_dt$ds1)
+  
+  p_common <- ggplot(all_nbr_dt, aes_string(x = "ds1", y = var_to_plot)) + 
+    geom_boxplot(outlier.shape=NA) +
+    # geom_jitter(aes(colour = chromo)) +
+    scale_x_discrete(name="")+
+    # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
+    scale_y_continuous(name=paste0(var_to_plot),
+                       breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+    # coord_cartesian(expand = FALSE) +
+    # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
+    #                   labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"))+
+    # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
+    #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
+    labs(colour  = "") +
+    ggtitle(label = paste0(var_to_plot))+
+    theme( # Increase size of axis lines
+      # top, right, bottom and left
+      # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
+      plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+      plot.subtitle = element_text(hjust = 0.5, size=10),
+      panel.grid = element_blank(),
+      # panel.grid.major = element_line(colour = "lightpink"),
+      # strip.text.x = element_text(),
+      axis.text.x = element_text( hjust=1,vjust = 0.5, size=12, angle = 90),
+      axis.line.x = element_line(size = .2, color = "black"),
+      axis.line.y = element_line(size = .3, color = "black"),
+      #    axis.ticks.x = element_blank(),
+      axis.text.y = element_text(color="black", hjust=1,vjust = 0.5),
+      axis.title.y = element_text(color="black", size=12),
+      axis.title.x = element_text(color="black", size=12),
+      panel.border = element_blank(),
+      panel.background = element_rect(fill = "transparent"),
+      legend.background =  element_rect(),
+      legend.key = element_blank()
+      # axis.text.x=element_text(size=10, angle=90, vjust=0.5, hjust=1)
+    ) #+
+  # geom_hline(yintercept = 1, linetype = 2)
+  
+  if(SSHFS) p_all
+  
+  p_dot <- p_common +  geom_jitter(aes(colour = chromo))
+  if(SSHFS) p_dot
+  
+  p_txt <- p_common + geom_text(aes(label=chromo, colour=chromo, fontface="bold"),size=2.5, position = position_jitter(w = 0.3)) + guides(colour = "none")
+  if(SSHFS) p_txt
+  
+  
+  outFile <- file.path(outFold, paste0(var_to_plot, "_boxplot_chromoDots.", plotType))
+  ggsave(plot=p_dot, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+  
+  outFile <- file.path(outFold, paste0(var_to_plot, "_boxplot_chromoLabs.", plotType))
+  ggsave(plot=p_txt, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+  
+  
+  
+}
 
 
 
