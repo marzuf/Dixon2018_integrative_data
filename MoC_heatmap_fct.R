@@ -306,11 +306,11 @@ cellSize <- 4
       mean_zscores_format <- sprintf("%.2f", round(mean_zscores,2))
       mean_zscores <- unlist(sapply(rowcol_order, function(x) mean(xx$zscores[xx$tmp_cond1 == x | xx$tmp_cond2 == x], na.rm=T)))
       meanRightLab <- paste0(as.character(mean_MoC_format), "\n(",as.character(mean_zscores_format), ")")
-      meanRightLeg <- paste0(comparisonName, " mean MoC without diag (mean: ", mean_mean_MoC_format, ").\n(z-scores)")
+      meanRightLeg <- paste0(comparisonName, " mean ", fill_legName, " without diag (mean: ", mean_mean_MoC_format, ").\n(z-scores)")
     } else {
       meanRightLab <- paste0(as.character(mean_MoC_format))
       # meanRightLeg <- paste0(comparisonName, " mean MoC without diag (mean: ", round(mean_mean_MoC,2), ").")
-      meanRightLeg <- paste0(comparisonName, " mean MoC without diag\n(mean: ", mean_mean_MoC_format, ")")
+      meanRightLeg <- paste0(comparisonName, " mean ", fill_legName, " without diag\n(mean: ", mean_mean_MoC_format, ")")
     }
     # add some space for the last label
     centre.plot <- centre.plot + expand_limits(x = nCond + xExpand) 

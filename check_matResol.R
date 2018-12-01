@@ -1,4 +1,5 @@
 library(data.table)
+library(foreach)
 
 options(scipen = 100)
 
@@ -39,7 +40,11 @@ all_files <- list.files(dirname(matrixPattern), full.names = TRUE, pattern = bas
 
 #all_files <- all_files[1]
 
-for(inFile in all_files) {
+dataset <- gsub("(.+)_chromatin_inter.+", "\\1", basename(matrixPattern))
+
+chromoLevels <- paste0("chr", c(1:22, "X"))
+
+check_resolDT <- foreach(inFile = all_files, .combine='rbind') %do% {
   
   txt <- paste0("> START file: ", basename(inFile), "\n")
   printAndLog(txt, logFile)
@@ -63,11 +68,15 @@ for(inFile in all_files) {
   hic_DT <- inMat[,-c(1:3)]
   stopifnot(nrow(hic_DT) == ncol(hic_DT))
   
-  
   txt <- paste0("... ", curr_chromo, " - matrix dim.:\t", paste0(dim(hic_DT), collapse = " x "), "\n")
   printAndLog(txt, logFile)
   
   matrixRowSum <- rowSums(hic_DT, na.rm=T)
+  
+  countSum <- sum(matrixRowSum)
+  
+  txt <- paste0("... matrix count sum:\t", round(countSum, 4), "\n")
+  printAndLog(txt, logFile)
   
   txt <- "... summary matrix row sum:\n"
   printAndLog(txt, logFile)
@@ -75,13 +84,40 @@ for(inFile in all_files) {
   print(summary(matrixRowSum))
   sink()
   
-  txt <- paste0("... # rows with >= 1000 counts:\t", sum(matrixRowSum >= 1000), "/", length(matrixRowSum), " (", round(sum(matrixRowSum >= 1000)/length(matrixRowSum)*100, 2),"%)\n")
+  rowAbove1000 <- sum(matrixRowSum >= 1000)/length(matrixRowSum)
+  
+  txt <- paste0("... # rows with >= 1000 counts:\t", sum(matrixRowSum >= 1000), "/", length(matrixRowSum), " (", round(rowAbove1000*100, 2),"%)\n")
   printAndLog(txt, logFile)
   txt <- "\n"
   printAndLog(txt, logFile)
+  
+  tmpDT <- data.frame(
+    dataset = dataset,
+    chromo = curr_chromo,
+    countSum = countSum,
+    rowAbove1000 = rowAbove1000,
+    stringsAsFactors = FALSE
+  )
+  colnames(tmpDT)[2] <- "chromo"
+  
+  tmpDT
 }
-  
-  
+
+check_resolDT$countSum <- round(check_resolDT$countSum, 4)
+check_resolDT$rowAbove1000 <- round(check_resolDT$rowAbove1000, 4)
+
+stopifnot(check_resolDT$chromo %in% chromoLevels)
+check_resolDT$chromo <- factor(check_resolDT$chromo, levels = chromoLevels)
+check_resolDT <- check_resolDT[order(as.numeric(check_resolDT$chromo), decreasing=F),]
+
+outFile <- file.path(outFold, paste0(dataset, "_check_resolDT.Rdata"))
+save(check_resolDT, file=outFile)
+cat(paste0("... written: ", outFile, "\n"))
+
+outFile <- file.path(outFold, paste0(dataset, "_check_resolDT.txt"))
+write.table(check_resolDT, col.names=T, row.names=F, sep="\t", quote=F, file = outFile)
+cat(paste0("... written: ", outFile, "\n"))
+
 ######################################################################################
 cat(paste0("... written: ", logFile, "\n"))
 cat("*** DONE\n")

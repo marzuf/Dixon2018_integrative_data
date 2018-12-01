@@ -7,10 +7,9 @@ library(stringi)
 
 options(scipen=100)
 
-# done differently previously in: /mnt/ed4/marie/TAD_call_pipeline_DI/compare_TopDom_tissue_consensus
 
-cat("> START: cmp_datasets_nbrTADs.R\n")
-# Rscript cmp_datasets_nbrTADs.R
+cat("> START: cmp_datasets_resol.R\n")
+# Rscript cmp_datasets_resol.R
 
 SSHFS <- FALSE
 setDir <- ifelse(SSHFS, "/media/electron", "")
@@ -21,10 +20,10 @@ if(SSHFS) setwd("/media/electron/mnt/etemp/marie/Dixon2018_integrative_data")
 
 registerDoMC(ifelse(SSHFS, 2, 40))
 
-outFold <- file.path("CMP_DATASETS_NBRTADS")
+outFold <- file.path("CMP_DATASETS_RESOL")
 system(paste0("mkdir -p ", outFold))
 
-logFile <- file.path(outFold, "cmp_datasets_nbrTADs_logFile.txt")
+logFile <- file.path(outFold, "cmp_datasets_resol_logFile.txt")
 if(!SSHFS) system(paste0("rm -f ", logFile))
 if(SSHFS) logFile <- ""
 
@@ -40,78 +39,28 @@ binSize <- 40000
 txt <- paste0("!! hard-coded bin size:\t", binSize, "\n")
 printAndLog(txt, logFile)
 
-consensusPattern <- "_conservedTADs.txt$"
 
-source("datasets_settings.R")
+mainFold <- "CHECK_MATRESOL"
 
-i=1
-ds1="breastCL1"
-all_nbr_dt <- foreach(ds1 = all_ds, .combine="rbind") %dopar% {
-  
-  all_files1 <- eval(parse(text = paste0(ds1, "Files")))
-  
-  name1 <- eval(parse(text = paste0(ds1, "name")))
-  
-  cat(paste0("*** START: ", ds1,  "\n"))
-    
-  chromo = "chr1"
-  chr_nbr_dt <- foreach(chromo = intersectChromos, .combine='rbind') %do% {
-    
-    cat(paste0("> ", ds1, "  - ", chromo, "\n"))
-    
-    file1 <- all_files1[grepl(paste0(chromo, "_"), basename(all_files1)) & grepl(paste0(name1), all_files1)]
-    stopifnot(length(file1) == 1)
-    
-    
-    dt1 <- read.delim(file1, stringsAsFactors = FALSE, header=F, col.names = c("chromo", "start", "end"))
-    if(is.character(dt1[1,2]) & is.character(dt1[2,2])) {
-      dt1 <- read.delim(file1, stringsAsFactors = FALSE, header=T, col.names = c("chromo", "start", "end"))
-    }
-    
-    
-    stopifnot(ncol(dt1) == 3)
-    stopifnot(is.numeric(dt1[,2]))
-    stopifnot(is.numeric(dt1[,3]))
-    
-    head(dt1, 2)
-    
-    chrEnd <- dt1[nrow(dt1), 3]
-    chromoCover <- sum(dt1[,3] - dt1[,2] + 1)/chrEnd
-    stopifnot(chromoCover >= 0 & chromoCover <= 1)
-    
-    data.frame(
-      ds1 = ds1,
-      chromo = chromo,
-      chromoCover = chromoCover,
-      nTADs = nrow(dt1),
-      meanSizeTADs = mean(dt1$end - dt1$start + 1),
-      stringsAsFactors = FALSE
-    )
-  }
-  chr_nbr_dt
+all_files <- list.files(mainFold, full.names=T, pattern="Rdata")
+
+curr_file <- all_files[1]
+all_resol_DT <- foreach(curr_file = all_files, .combine='rbind') %do% {
+  eval(parse(text=load(curr_file)))
 }
 
-outFile <- file.path(outFold, "all_nbr_dt.Rdata")
-save(all_nbr_dt, file = outFile)
-cat(paste0("... written: ", outFile, "\n"))
+all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)
 
-all_nbr_dt <- eval(parse(text = load(outFile)))
-stopifnot(nrow(all_nbr_dt) == (length(intersectChromos) * length(all_ds)))
+all_vars <- colnames(all_resol_DT)[!colnames(all_resol_DT) %in% c("dataset", "chromo")]
 
-all_nbr_dt$chromo <- factor(as.character(all_nbr_dt$chromo), levels = paste0("chr", c(1:22, "X")))
-
-stopifnot(!is.na(all_nbr_dt))
-
-all_vars <- colnames(all_nbr_dt)[!colnames(all_nbr_dt) %in% c("ds1", "chromo")]
-
+var_to_plot = "rowAbove1000"
 for(var_to_plot in all_vars) {
   
+  mean_all_resol_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset")), FUN=mean, data = all_resol_DT)
+  mean_all_resol_DT <- mean_all_resol_DT[order(mean_all_resol_DT[, var_to_plot], decreasing = TRUE),]
+  all_resol_DT$dataset <- factor(as.character(all_resol_DT$dataset), levels = mean_all_resol_DT$dataset)
   
-  mean_all_nbr_dt <- aggregate(as.formula(paste0(var_to_plot, " ~ ds1")), FUN=mean, data = all_nbr_dt)
-  mean_all_nbr_dt <- mean_all_nbr_dt[order(mean_all_nbr_dt[, var_to_plot], decreasing = TRUE),]
-  all_nbr_dt$ds1 <- factor(as.character(all_nbr_dt$ds1), levels = mean_all_nbr_dt$ds1)
-  
-  p_common <- ggplot(all_nbr_dt, aes_string(x = "ds1", y = var_to_plot)) + 
+  p_common <- ggplot(all_resol_DT, aes_string(x = "dataset", y = var_to_plot)) + 
     geom_boxplot(outlier.shape=NA) +
     # geom_jitter(aes(colour = chromo)) +
     scale_x_discrete(name="")+

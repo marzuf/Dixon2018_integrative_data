@@ -44,87 +44,9 @@ printAndLog(txt, logFile)
 
 consensusPattern <- "_conservedTADs.txt$"
 
-breastConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
-breastConsensusFold <- file.path("FIND_CONSENSUS_TADS", breastConsensusname)
-breastConsensusFiles <- list.files(breastConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(breastConsensusFiles) > 0)
-breast_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(breastConsensusFiles)))
-stopifnot(length(breast_consensus_chromos) > 0)
 
-mcf7Consensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP"
-mcf7ConsensusFold <- file.path("FIND_CONSENSUS_TADS",mcf7Consensusname)
-mcf7ConsensusFiles <- list.files(mcf7ConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(mcf7ConsensusFiles) > 0)
-mcf7_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(mcf7ConsensusFiles)))
-stopifnot(length(mcf7_consensus_chromos) > 0)
+source("datasets_settings.R")
 
-lungConsensusname <-  "GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460"
-lungConsensusFold <- file.path("FIND_CONSENSUS_TADS", lungConsensusname)
-lungConsensusFiles <- list.files(lungConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(lungConsensusFiles) > 0)
-lung_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(lungConsensusFiles)))
-stopifnot(length(lung_consensus_chromos) > 0)
-
-topdomPattern <- "_final_domains.txt$"
-
-# breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom/GSM1631185_MCF7_40kb_chr1_final_domains.txt
-breastCL1name <- "GSM1631185_GSE66733"
-breastFold1 <- file.path("breast/MCF7/", breastCL1name, "MCF7/TopDom")
-breastCL1Files <- list.files(breastFold1, full.names=T, pattern = topdomPattern)
-stopifnot(length(breastCL1Files) > 0)
-breast1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(breastCL1Files)))
-stopifnot(length(breast1_chromos) > 0)
-
-# breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom/GSE75070_MCF7_shGFP_40kb_chr1_final_domains.txt
-breastCL2name <- "GSM1942100_GSM1942101_GSE75070"
-breastFold2 <- file.path("breast/MCF7", breastCL2name, "shGFP/TopDom")
-breastCL2Files <- list.files(breastFold2, full.names=T, pattern = topdomPattern)
-stopifnot(length(breastCL2Files) > 0)
-breast2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(breastCL2Files)))
-stopifnot(length(breast2_chromos) > 0)
-
-# breast/T47D/ENCSR549MGQ_GSE105697/TopDom/GSE105697_ENCFF364CWZ_T47D_40kb_chr1_final_domains.txt
-breastCL3name <- "ENCSR549MGQ_GSE105697"
-breastFold3 <- file.path("breast/T47D", breastCL3name, "TopDom")
-breastCL3Files <- list.files(breastFold3, full.names=T, pattern = topdomPattern)
-stopifnot(length(breastCL3Files) > 0)
-breast3_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(breastCL3Files)))
-stopifnot(length(breast3_chromos) > 0)
-
-# lung/A549/ENCSR444WCZ/TopDom/GSE105600_ENCFF852YOE_A549_40kb_chr1_final_domains.txt
-lungCL1name <- "ENCSR444WCZ"
-lungFold1 <- file.path("lung/A549", lungCL1name, "TopDom")
-lungCL1Files <- list.files(lungFold1, full.names=T, pattern = topdomPattern)
-stopifnot(length(lungCL1Files) > 0)
-lung1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lungCL1Files)))
-stopifnot(length(lung1_chromos) > 0)
-
-# lung/NCI-H460/ENCSR489OCU/TopDom/GSE105725_ENCFF697NNX_NCIH460_40kb_chr1_final_domains.txt
-lungCL2name <- "ENCSR489OCU"
-lungFold2 <- file.path("lung/NCI-H460", lungCL2name, "TopDom")
-lungCL2Files <- list.files(lungFold2, full.names=T, pattern = topdomPattern)
-stopifnot(length(lungCL2Files) > 0)
-lung2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lungCL2Files)))
-stopifnot(length(lung2_chromos) > 0)
-
-
-pipConsensusname <- "pipeline_TopDom"
-pipConsensusFold <- file.path(setDir, "/mnt/ed4/marie/TAD_call_pipeline_TopDom", "consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final")
-pipConsensusFiles <- list.files(pipConsensusFold, full.names=T, pattern = consensusPattern)
-pip_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(pipConsensusFiles)))
-
-intersectChromos <- Reduce(intersect, list(
-  breast_consensus_chromos, mcf7_consensus_chromos, pip_consensus_chromos,
-  lung_consensus_chromos,
-  breast1_chromos, breast2_chromos, breast3_chromos,
-  lung1_chromos, lung2_chromos
-))
-
-all_ds <- c(
-  "breastConsensus", "mcf7Consensus", "lungConsensus", "pipConsensus",
-  "breastCL1", "breastCL2",
-  "lungCL1", "lungCL2"
-)
 
 all_cmps <- combn(all_ds, m = 2)
 
@@ -311,7 +233,7 @@ foo <- try(dev.off())
 # [1] "breastConsensus" "mcf7Consensus"   "lungConsensus"   "breastCL1"       "breastCL2"       "lungCL1"        
 
 
-for(tissue in c("lung", "breast", "mcf7")) {
+for(tissue in c("lung", "breast", "mcf7", "kidney","skin")) {
   
   consensus_dt <- all_MoC_dt[ (grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds1) | grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds2) ) &
                                 (grepl(tolower(tissue), tolower(all_MoC_dt$ds1)) & grepl(tolower(tissue), tolower(all_MoC_dt$ds2)) )
