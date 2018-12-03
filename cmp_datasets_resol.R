@@ -53,6 +53,8 @@ all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)
 
 all_vars <- colnames(all_resol_DT)[!colnames(all_resol_DT) %in% c("dataset", "chromo")]
 
+all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+
 var_to_plot = "rowAbove1000"
 for(var_to_plot in all_vars) {
   
@@ -60,7 +62,12 @@ for(var_to_plot in all_vars) {
   mean_all_resol_DT <- mean_all_resol_DT[order(mean_all_resol_DT[, var_to_plot], decreasing = TRUE),]
   all_resol_DT$dataset <- factor(as.character(all_resol_DT$dataset), levels = mean_all_resol_DT$dataset)
   
-  p_common <- ggplot(all_resol_DT, aes_string(x = "dataset", y = var_to_plot)) + 
+  mean_all_resol_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ datasetLabel")), FUN=mean, data = all_resol_DT)
+  mean_all_resol_DT <- mean_all_resol_DT[order(mean_all_resol_DT[, var_to_plot], decreasing = TRUE),]
+  all_resol_DT$datasetLabel <- factor(as.character(all_resol_DT$datasetLabel), levels = mean_all_resol_DT$datasetLabel)
+  
+  # p_common <- ggplot(all_resol_DT, aes_string(x = "dataset", y = var_to_plot)) + 
+  p_common <- ggplot(all_resol_DT, aes_string(x = "datasetLabel", y = var_to_plot)) + 
     geom_boxplot(outlier.shape=NA) +
     # geom_jitter(aes(colour = chromo)) +
     scale_x_discrete(name="")+
@@ -82,7 +89,7 @@ for(var_to_plot in all_vars) {
       panel.grid = element_blank(),
       # panel.grid.major = element_line(colour = "lightpink"),
       # strip.text.x = element_text(),
-      axis.text.x = element_text( hjust=1,vjust = 0.5, size=12, angle = 90),
+      axis.text.x = element_text( hjust=1,vjust = 0.5, size=8, angle = 90),
       axis.line.x = element_line(size = .2, color = "black"),
       axis.line.y = element_line(size = .3, color = "black"),
       #    axis.ticks.x = element_blank(),

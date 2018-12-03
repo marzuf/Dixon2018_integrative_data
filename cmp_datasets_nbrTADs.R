@@ -104,8 +104,18 @@ stopifnot(!is.na(all_nbr_dt))
 
 all_vars <- colnames(all_nbr_dt)[!colnames(all_nbr_dt) %in% c("ds1", "chromo")]
 
+plot_tit <- c(
+meanSizeTADs = "TAD mean size (bp)",
+chromoCover = "Chromosome coverage",
+nTADs = "Nbr of TADs"
+)
+
+stopifnot(all_vars %in% names(plot_tit))
+
+
 for(var_to_plot in all_vars) {
   
+  mytit <- plot_tit[var_to_plot]
   
   mean_all_nbr_dt <- aggregate(as.formula(paste0(var_to_plot, " ~ ds1")), FUN=mean, data = all_nbr_dt)
   mean_all_nbr_dt <- mean_all_nbr_dt[order(mean_all_nbr_dt[, var_to_plot], decreasing = TRUE),]
@@ -116,7 +126,8 @@ for(var_to_plot in all_vars) {
     # geom_jitter(aes(colour = chromo)) +
     scale_x_discrete(name="")+
     # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
-    scale_y_continuous(name=paste0(var_to_plot),
+#    scale_y_continuous(name=paste0(var_to_plot),
+    scale_y_continuous(name=paste0(mytit),
                        breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
     # coord_cartesian(expand = FALSE) +
     # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
@@ -124,7 +135,8 @@ for(var_to_plot in all_vars) {
     # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
     #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
     labs(colour  = "") +
-    ggtitle(label = paste0(var_to_plot))+
+#    ggtitle(label = paste0(var_to_plot))+
+    ggtitle(label = paste0(mytit))+
     theme( # Increase size of axis lines
       # top, right, bottom and left
       # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),

@@ -223,6 +223,14 @@ var_to_plot <- colnames(all_match_dt)[!colnames(all_match_dt) %in% c("ds1", "ds2
 
 curr_var <- "strictMatchRatio"
 
+plot_tit <- c(
+strictMatchRatio = "Strict matching ratio",
+looseMatchRatio = "Loose matching ratio",
+bdMatchRatio = "Boundary matching ratio"
+)
+
+stopifnot(var_to_plot %in% names(plot_tit))
+
 all_match_dt$ds1_name <- sapply(all_match_dt$ds1, function(x) eval(parse(text = paste0(x, "name"))))
 all_match_dt$ds1_init <- all_match_dt$ds1
 all_match_dt$ds1 <- paste0(all_match_dt$ds1, "/\n", all_match_dt$ds1_name)
@@ -239,6 +247,9 @@ all_match_dt$ds2 <- unlist(sapply(all_match_dt$ds2, function(x) paste0(stri_wrap
 
 
 for(curr_var in var_to_plot) {
+
+
+  mytit <- plot_tit[curr_var]
   
   mean_match_dt <- aggregate(as.formula(paste0(curr_var, " ~ ds1 + ds2")), FUN=mean, data = all_match_dt)
   stopifnot(!is.na(mean_match_dt))
@@ -321,7 +332,8 @@ for(curr_var in var_to_plot) {
               # geom_jitter(aes(colour = chromo)) +
       scale_x_discrete(name="")+
       # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
-      scale_y_continuous(name=paste0(curr_var, " with consensus"),
+#      scale_y_continuous(name=paste0(curr_var, " with consensus"),
+      scale_y_continuous(name=paste0(mytit, " with consensus"),
                          breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
       # coord_cartesian(expand = FALSE) +
       # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
@@ -329,7 +341,8 @@ for(curr_var in var_to_plot) {
       # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
       #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
       labs(colour  = "") +
-      ggtitle(label = paste0(curr_var, " between ", tissue, " and consensus"))+
+#      ggtitle(label = paste0(curr_var, " between ", tissue, " and consensus"))+
+      ggtitle(label = paste0(mytit, " between ", tissue, " and consensus"))+
       theme( # Increase size of axis lines
         # top, right, bottom and left
         # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
