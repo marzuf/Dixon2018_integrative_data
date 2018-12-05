@@ -42,6 +42,9 @@ printAndLog(txt, logFile)
 
 mainFold <- "CHECK_MATRESOL"
 
+consensusPattern=""
+source("datasets_settings.R")
+
 all_files <- list.files(mainFold, full.names=T, pattern="Rdata")
 
 curr_file <- all_files[1]
@@ -53,7 +56,9 @@ all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)
 
 all_vars <- colnames(all_resol_DT)[!colnames(all_resol_DT) %in% c("dataset", "chromo")]
 
-all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+#all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+
+all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) names(ds_mapping[ds_mapping == x])))
 
 var_to_plot = "rowAbove1000"
 for(var_to_plot in all_vars) {

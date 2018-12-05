@@ -231,18 +231,20 @@ bdMatchRatio = "Boundary matching ratio"
 
 stopifnot(var_to_plot %in% names(plot_tit))
 
-all_match_dt$ds1_name <- sapply(all_match_dt$ds1, function(x) eval(parse(text = paste0(x, "name"))))
-all_match_dt$ds1_init <- all_match_dt$ds1
-all_match_dt$ds1 <- paste0(all_match_dt$ds1, "/\n", all_match_dt$ds1_name)
 
-all_match_dt$ds2_name <- sapply(all_match_dt$ds2, function(x) eval(parse(text = paste0(x, "name"))))
-all_match_dt$ds2_init <- all_match_dt$ds2
-all_match_dt$ds2 <- paste0(all_match_dt$ds2, "/\n", all_match_dt$ds2_name)
-
-all_match_dt$ds1 <- gsub("_vs_", " ", all_match_dt$ds1)
-all_match_dt$ds1 <- unlist(sapply(all_match_dt$ds1, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
-all_match_dt$ds2 <- gsub("_vs_", " ", all_match_dt$ds2)
-all_match_dt$ds2 <- unlist(sapply(all_match_dt$ds2, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+### UNCOMMENT TO HAVE NAME WITH CELL LINES
+# all_match_dt$ds1_name <- sapply(all_match_dt$ds1, function(x) eval(parse(text = paste0(x, "name"))))
+# all_match_dt$ds1_init <- all_match_dt$ds1
+# all_match_dt$ds1 <- paste0(all_match_dt$ds1, "/\n", all_match_dt$ds1_name)
+# 
+# all_match_dt$ds2_name <- sapply(all_match_dt$ds2, function(x) eval(parse(text = paste0(x, "name"))))
+# all_match_dt$ds2_init <- all_match_dt$ds2
+# all_match_dt$ds2 <- paste0(all_match_dt$ds2, "/\n", all_match_dt$ds2_name)
+# 
+# all_match_dt$ds1 <- gsub("_vs_", " ", all_match_dt$ds1)
+# all_match_dt$ds1 <- unlist(sapply(all_match_dt$ds1, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+# all_match_dt$ds2 <- gsub("_vs_", " ", all_match_dt$ds2)
+# all_match_dt$ds2 <- unlist(sapply(all_match_dt$ds2, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
 
 
 
@@ -308,6 +310,16 @@ for(curr_var in var_to_plot) {
     consensus_dt <- all_match_dt[ (grepl(paste0(tissue, "Consensus"), all_match_dt$ds1) | grepl(paste0(tissue, "Consensus"), all_match_dt$ds2) ) &
                                   (grepl(tolower(tissue), tolower(all_match_dt$ds1)) & grepl(tolower(tissue), tolower(all_match_dt$ds2)) )
                                 ,]
+    
+    
+    # if short name -> cannot find mcf7 cell lines
+    if(nrow(consensus_dt) == 0 & tissue == "mcf7") {
+      consensus_dt <- all_match_dt[ (grepl(paste0(tissue, "Consensus"), all_match_dt$ds1) | grepl(paste0(tissue, "Consensus"), all_match_dt$ds2))  &
+                                    ( all_match_dt$ds1 %in% c("breastCL1", "breastCL2") | all_match_dt$ds2 %in% c("breastCL1", "breastCL2") ) 
+                                  ,]
+    }
+    
+    
     consensus_dt$newDS1 <- ifelse(grepl(paste0(tissue, "Consensus"), consensus_dt$ds1), consensus_dt$ds1, consensus_dt$ds2)
     consensus_dt$newDS2 <- ifelse(grepl(paste0(tissue, "Consensus"), consensus_dt$ds2), consensus_dt$ds1, consensus_dt$ds2)
     stopifnot(grepl(paste0(tissue, "Consensus"), consensus_dt$newDS1))
@@ -386,8 +398,12 @@ for(curr_var in var_to_plot) {
   }
   
   tissue <- pipConsensusname
+  if( all(all_match_dt$ds1 %in% all_ds)) tissue <- "pipConsensus"
   
   consensus_dt <- all_match_dt[ (grepl(paste0(tissue), all_match_dt$ds1) | grepl(paste0(tissue), all_match_dt$ds2) ),]
+  
+  
+  
   # consensus_dt$newDS1 <- ifelse(consensus_dt$ds1 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
   # consensus_dt$newDS2 <- ifelse(consensus_dt$ds2 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
   consensus_dt$newDS1 <- ifelse(grepl(paste0(tissue), consensus_dt$ds1), consensus_dt$ds1, consensus_dt$ds2)

@@ -151,18 +151,19 @@ all_MoC_dt_save <- all_MoC_dt
 
 #******************************************************************************************************************************************** DRAW SYMMETRIC MATRIX
 
-all_MoC_dt$ds1_name <- sapply(all_MoC_dt$ds1, function(x) eval(parse(text = paste0(x, "name"))))
-all_MoC_dt$ds1_init <- all_MoC_dt$ds1
-all_MoC_dt$ds1 <- paste0(all_MoC_dt$ds1, "/\n", all_MoC_dt$ds1_name)
+# UNCOMMENT TO HAVE NAME WITH CELL LINES ACCESSIONS
+#all_MoC_dt$ds1_name <- sapply(all_MoC_dt$ds1, function(x) eval(parse(text = paste0(x, "name"))))
+#all_MoC_dt$ds1_init <- all_MoC_dt$ds1
+#all_MoC_dt$ds1 <- paste0(all_MoC_dt$ds1, "/\n", all_MoC_dt$ds1_name)
 
-all_MoC_dt$ds2_name <- sapply(all_MoC_dt$ds2, function(x) eval(parse(text = paste0(x, "name"))))
-all_MoC_dt$ds2_init <- all_MoC_dt$ds2
-all_MoC_dt$ds2 <- paste0(all_MoC_dt$ds2, "/\n", all_MoC_dt$ds2_name)
+#all_MoC_dt$ds2_name <- sapply(all_MoC_dt$ds2, function(x) eval(parse(text = paste0(x, "name"))))
+#all_MoC_dt$ds2_init <- all_MoC_dt$ds2
+#all_MoC_dt$ds2 <- paste0(all_MoC_dt$ds2, "/\n", all_MoC_dt$ds2_name)
 
-all_MoC_dt$ds1 <- gsub("_vs_", " ", all_MoC_dt$ds1)
-all_MoC_dt$ds1 <- unlist(sapply(all_MoC_dt$ds1, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
-all_MoC_dt$ds2 <- gsub("_vs_", " ", all_MoC_dt$ds2)
-all_MoC_dt$ds2 <- unlist(sapply(all_MoC_dt$ds2, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+#all_MoC_dt$ds1 <- gsub("_vs_", " ", all_MoC_dt$ds1)
+#all_MoC_dt$ds1 <- unlist(sapply(all_MoC_dt$ds1, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+#all_MoC_dt$ds2 <- gsub("_vs_", " ", all_MoC_dt$ds2)
+#all_MoC_dt$ds2 <- unlist(sapply(all_MoC_dt$ds2, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
 
 mean_MoC_dt <- aggregate(MoC ~ ds1 + ds2, FUN=mean, data = all_MoC_dt)
 stopifnot(!is.na(mean_MoC_dt))
@@ -232,12 +233,19 @@ foo <- try(dev.off())
 # > unique(all_MoC_dt$ds1_init)
 # [1] "breastConsensus" "mcf7Consensus"   "lungConsensus"   "breastCL1"       "breastCL2"       "lungCL1"        
 
+cat(paste0(unique(all_MoC_dt$ds1), collapse=","))
 
 for(tissue in c("lung", "breast", "mcf7", "kidney","skin")) {
   
   consensus_dt <- all_MoC_dt[ (grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds1) | grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds2) ) &
                                 (grepl(tolower(tissue), tolower(all_MoC_dt$ds1)) & grepl(tolower(tissue), tolower(all_MoC_dt$ds2)) )
                                 ,]
+  # if short name -> cannot find mcf7 cell lines
+  if(nrow(consensus_dt) == 0 & tissue == "mcf7") {
+    consensus_dt <- all_MoC_dt[ (grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds1) | grepl(paste0(tissue, "Consensus"), all_MoC_dt$ds2))  &
+                                  ( all_MoC_dt$ds1 %in% c("breastCL1", "breastCL2") | all_MoC_dt$ds2 %in% c("breastCL1", "breastCL2") ) 
+                                ,]
+  }
   # consensus_dt$newDS1 <- ifelse(consensus_dt$ds1 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
   # consensus_dt$newDS2 <- ifelse(consensus_dt$ds2 == "consensus", consensus_dt$ds1, consensus_dt$ds2)
   consensus_dt$newDS1 <- ifelse(grepl(paste0(tissue, "Consensus"), consensus_dt$ds1), consensus_dt$ds1, consensus_dt$ds2)
@@ -320,6 +328,7 @@ for(tissue in c("lung", "breast", "mcf7", "kidney","skin")) {
 ### add the same boxplot here for pipTopDomconsensus only !!!
 
 tissue <- pipConsensusname
+if( all(all_MoC_dt$ds1 %in% all_ds)) tissue <- "pipConsensus"
 
 consensus_dt <- all_MoC_dt[ (grepl(paste0(tissue), all_MoC_dt$ds1) | grepl(paste0(tissue), all_MoC_dt$ds2) ),]
 # consensus_dt$newDS1 <- ifelse(consensus_dt$ds1 == "consensus", consensus_dt$ds1, consensus_dt$ds2)

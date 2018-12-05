@@ -33,8 +33,6 @@ stopifnot(length(kidneyConsensusFiles) > 0)
 kidney_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(kidneyConsensusFiles)))
 stopifnot(length(kidney_consensus_chromos) > 0)
 
-
-
 topdomPattern <- "_final_domains.txt$"
 
 # breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom/GSM1631185_MCF7_40kb_chr1_final_domains.txt
@@ -76,7 +74,6 @@ lungCL2Files <- list.files(lungFold2, full.names=T, pattern = topdomPattern)
 stopifnot(length(lungCL2Files) > 0)
 lung2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lungCL2Files)))
 stopifnot(length(lung2_chromos) > 0)
-
 
 
 #pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom GSE105566_ENCFF358MNA_Panc1_40kb_chr.+final_domains.txt 
@@ -148,14 +145,47 @@ intersectChromos <- Reduce(intersect, list(
   skin1_chromos, skin2_chromos
 ))
 
+
+# 6 consensus + 11 datasets
 all_ds <- c(
-  "pipConsensus",
-  "breastConsensus", "mcf7Consensus", "lungConsensus", "kidneyConsensus", "skinConsensus",
-  "breastCL1", "breastCL2",
-  "lungCL1", "lungCL2",
-  "pancreasCL1", 
-  "prostateCL1",
-  "kidneyCL1", "kidneyCL2",
-  "skinCL1", "skinCL2"
+"pipConsensus",
+"breastConsensus", 
+"mcf7Consensus", 
+"lungConsensus", 
+"kidneyConsensus", 
+"skinConsensus",
+"breastCL1", 
+"breastCL2", 
+"breastCL3",
+"lungCL1", 
+"lungCL2",
+"pancreasCL1", 
+"prostateCL1",
+"kidneyCL1", 
+"kidneyCL2",
+"skinCL1", 
+"skinCL2"
 )
+
+ds_mapping <- c(
+"breastCL1" = "HiCStein-MCF7-WT__hg19__.+TopDom.matrix" , 
+"breastCL2" = "GSE75070_HiCStein-MCF7-shGFP_hg19_.+TopDom.matrix",
+"breastCL3" = "GSE105697_ENCFF364CWZ", 
+
+"lungCL1" = "GSE105600_ENCFF852YOE",
+"lungCL2" = "GSE105725_ENCFF697NNX",
+
+"pancreasCL1" = "GSE105566_ENCFF358MNA", 
+
+"prostateCL1" = "GSE105557_ENCFF270HJX",
+
+"kidneyCL1" = "GSE105465_ENCFF777DUA", 
+"kidneyCL2" =  "GSE105235_ENCFF235TGH",
+
+"skinCL1" = "GSE106022_ENCFF614EKT", 
+"skinCL2" = "GSE105491_ENCFF458OWO"
+)
+
+ 
+
 
