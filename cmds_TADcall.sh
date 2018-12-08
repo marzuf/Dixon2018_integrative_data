@@ -119,6 +119,65 @@ elif [[ $dataID == "GSE105491" ]]; then
     outFilePrefix="GSE105491_ENCFF458OWO_SKMEL5_40kb_"
 
 
+elif [[ $dataID == "GSE63525" ]]; then
+# /mnt/etemp/marie/Dixon2018_integrative_data/leukemia/K562/GSE63525/GSE63525_K562_40kb_ICE_chr1_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/leukemia/K562/GSE63525"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/leukemia/K562/GSE63525/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE63525_K562_40kb_ICE_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="GSE63525_K562_40kb_ICE_"
+
+
+elif [[ $dataID == "GB176" ]]; then
+#glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180_chr7_40kb_norm_int_count_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/COUNTS"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/$dataID/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE81879_GSM2176966_${dataID}_"
+    inFileSuffix="_40kb_norm_int_count_TopDom.matrix"
+    outFilePrefix="GSE81879_GSM2176966_${dataID}_40kb_norm_int_count"
+
+elif [[ $dataID == "GB180" ]]; then
+#glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180_chr7_40kb_norm_int_count_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/COUNTS"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/$dataID/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE81879_GSM2176967_${dataID}_"
+    inFileSuffix="_40kb_norm_int_count_TopDom.matrix"
+    outFilePrefix="GSE81879_GSM2176967_${dataID}_40kb_norm_int_count"
+
+
+elif [[ $dataID == "GB182" ]]; then
+#glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180_chr7_40kb_norm_int_count_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/COUNTS"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/$dataID/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE81879_GSM2176968_${dataID}_"
+    inFileSuffix="_40kb_norm_int_count_TopDom.matrix"
+    outFilePrefix="GSE81879_GSM2176968_${dataID}_40kb_norm_int_count"
+
+
+elif [[ $dataID == "GB183" ]]; then
+#glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180_chr7_40kb_norm_int_count_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/COUNTS"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/$dataID/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE81879_GSM2176969_${dataID}_"
+    inFileSuffix="_40kb_norm_int_count_TopDom.matrix"
+    outFilePrefix="GSE81879_GSM2176969_${dataID}_40kb_norm_int_count"
+
+
+elif [[ $dataID == "GB238" ]]; then
+#glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180_chr7_40kb_norm_int_count_TopDom.matrix
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/COUNTS"
+    outFold="/mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/$dataID/TopDom"
+    mkdir -p outFold
+    inFilePrefix="GSE81879_GSM2176970_${dataID}_"
+    inFileSuffix="_40kb_norm_int_count_TopDom.matrix"
+    outFilePrefix="GSE81879_GSM2176970_${dataID}_40kb_norm_int_count"
+
+
 fi
 
 echo "... inFold = $inFold"
@@ -129,10 +188,10 @@ echo "... outFilePrefix = $outFilePrefix"
 
 
 
-#all_chromos=( "chr"{1..22} "chrX" )
-all_chromos=( "chr1" )
+all_chromos=( "chr"{1..22} "chrX" )
+#all_chromos=( "chr1" )
 #all_chromos=( "chr21" )
-
+#all_chromos=( "chr9" )
 
 parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $topdom_script -i $inFold/${inFilePrefix}{}${inFileSuffix} -o $outFold/${outFilePrefix}{} -w $window_size" -- ${all_chromos[@]}
 parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $topdom_script -i $inFold/${inFilePrefix}{}${inFileSuffix} -o $outFold/${outFilePrefix}{} -w $window_size" -- ${all_chromos[@]}
