@@ -1,3 +1,11 @@
+
+topdomPattern <- "_final_domains.txt$"
+
+
+#================================================
+#================================================ BREAST
+#================================================
+
 breastConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
 breastConsensusFold <- file.path("FIND_CONSENSUS_TADS", breastConsensusname)
 breastConsensusFiles <- list.files(breastConsensusFold, full.names=T, pattern = consensusPattern)
@@ -11,29 +19,6 @@ mcf7ConsensusFiles <- list.files(mcf7ConsensusFold, full.names=T, pattern = cons
 stopifnot(length(mcf7ConsensusFiles) > 0)
 mcf7_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(mcf7ConsensusFiles)))
 stopifnot(length(mcf7_consensus_chromos) > 0)
-
-lungConsensusname <-  "GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460"
-lungConsensusFold <- file.path("FIND_CONSENSUS_TADS", lungConsensusname)
-lungConsensusFiles <- list.files(lungConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(lungConsensusFiles) > 0)
-lung_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(lungConsensusFiles)))
-stopifnot(length(lung_consensus_chromos) > 0)
-
-skinConsensusname <-  "GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5"
-skinConsensusFold <- file.path("FIND_CONSENSUS_TADS", skinConsensusname)
-skinConsensusFiles <- list.files(skinConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(skinConsensusFiles) > 0)
-skin_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(skinConsensusFiles)))
-stopifnot(length(skin_consensus_chromos) > 0)
-
-kidneyConsensusname <-  "GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401"
-kidneyConsensusFold <- file.path("FIND_CONSENSUS_TADS", kidneyConsensusname)
-kidneyConsensusFiles <- list.files(kidneyConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(kidneyConsensusFiles) > 0)
-kidney_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(kidneyConsensusFiles)))
-stopifnot(length(kidney_consensus_chromos) > 0)
-
-topdomPattern <- "_final_domains.txt$"
 
 # breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom/GSM1631185_MCF7_40kb_chr1_final_domains.txt
 breastCL1name <- "GSM1631185_GSE66733"
@@ -59,6 +44,17 @@ stopifnot(length(breastCL3Files) > 0)
 breast3_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(breastCL3Files)))
 stopifnot(length(breast3_chromos) > 0)
 
+#================================================
+#================================================ LUNG
+#================================================
+
+lungConsensusname <-  "GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460"
+lungConsensusFold <- file.path("FIND_CONSENSUS_TADS", lungConsensusname)
+lungConsensusFiles <- list.files(lungConsensusFold, full.names=T, pattern = consensusPattern)
+stopifnot(length(lungConsensusFiles) > 0)
+lung_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(lungConsensusFiles)))
+stopifnot(length(lung_consensus_chromos) > 0)
+
 # lung/A549/ENCSR444WCZ/TopDom/GSE105600_ENCFF852YOE_A549_40kb_chr1_final_domains.txt
 lungCL1name <- "ENCSR444WCZ"
 lungFold1 <- file.path("lung/A549", lungCL1name, "TopDom")
@@ -74,6 +70,10 @@ lungCL2Files <- list.files(lungFold2, full.names=T, pattern = topdomPattern)
 stopifnot(length(lungCL2Files) > 0)
 lung2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lungCL2Files)))
 stopifnot(length(lung2_chromos) > 0)
+
+#================================================
+#================================================ PANCREAS
+#================================================
 
 
 #pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom GSE105566_ENCFF358MNA_Panc1_40kb_chr.+final_domains.txt 
@@ -93,6 +93,10 @@ stopifnot(length(prostateCL1Files) > 0)
 prostate1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(prostateCL1Files)))
 stopifnot(length(prostate1_chromos) > 0)
 
+#================================================
+#================================================ KIDNEY
+#================================================
+
 #kidney/Caki2/GSE105465/ENCFF777DUA/TopDom GSE105465_ENCFF777DUA_Caki2_40kb_chr.+final_domains.txt 
 kidneyCL1name <- "ENCFF777DUA"
 kidneyFold1 <- file.path("kidney/Caki2/GSE105465", kidneyCL1name, "TopDom")
@@ -108,6 +112,19 @@ kidneyCL2Files <- list.files(kidneyFold2, full.names=T, pattern = topdomPattern)
 stopifnot(length(kidneyCL2Files) > 0)
 kidney2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(kidneyCL2Files)))
 stopifnot(length(kidney2_chromos) > 0)
+
+kidneyConsensusname <-  "GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401"
+kidneyConsensusFold <- file.path("FIND_CONSENSUS_TADS", kidneyConsensusname)
+kidneyConsensusFiles <- list.files(kidneyConsensusFold, full.names=T, pattern = consensusPattern)
+stopifnot(length(kidneyConsensusFiles) > 0)
+kidney_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(kidneyConsensusFiles)))
+stopifnot(length(kidney_consensus_chromos) > 0)
+
+
+#================================================
+#================================================ SKIN
+#================================================
+
 
 #skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom GSE106022_ENCFF614EKT_RPMI7951_40kb_chr.+final_domains.txt 
 skinCL1name <- "ENCFF614EKT"
@@ -125,13 +142,85 @@ stopifnot(length(skinCL2Files) > 0)
 skin2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(skinCL2Files)))
 stopifnot(length(skin2_chromos) > 0)
 
-#stop("--ok--\n")
+skinConsensusname <-  "GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5"
+skinConsensusFold <- file.path("FIND_CONSENSUS_TADS", skinConsensusname)
+skinConsensusFiles <- list.files(skinConsensusFold, full.names=T, pattern = consensusPattern)
+stopifnot(length(skinConsensusFiles) > 0)
+skin_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(skinConsensusFiles)))
+stopifnot(length(skin_consensus_chromos) > 0)
+
+
+
+#================================================
+#================================================ COLORECTAL
+#================================================
+
+coloCL1name <- "ENCFF614EKT"
+coloFold1 <- file.path("colo/RPMI-7951/GSE106022", coloCL1name, "TopDom")
+coloCL1Files <- list.files(coloFold1, full.names=T, pattern = topdomPattern)
+stopifnot(length(coloCL1Files) > 0)
+colo1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(coloCL1Files)))
+stopifnot(length(colo1_chromos) > 0)
+
+
+#================================================
+#================================================ ASTROCYTES
+#================================================
+
+astroCL1name <- "ENCFF614EKT"
+astroFold1 <- file.path("astro/RPMI-7951/GSE106022", astroCL1name, "TopDom")
+astroCL1Files <- list.files(astroFold1, full.names=T, pattern = topdomPattern)
+stopifnot(length(astroCL1Files) > 0)
+astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL1Files)))
+stopifnot(length(astro1_chromos) > 0)
+
+astroCL2name <- "ENCFF614EKT"
+astroFold2 <- file.path("astro/RPMI-7951/GSE106022", astroCL2name, "TopDom")
+astroCL2Files <- list.files(astroFold2, full.names=T, pattern = topdomPattern)
+stopifnot(length(astroCL2Files) > 0)
+astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL2Files)))
+stopifnot(length(astro2_chromos) > 0)
+
+astroConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
+astroConsensusFold <- file.path("FIND_CONSENSUS_TADS", astroConsensusname)
+astroConsensusFiles <- list.files(astroConsensusFold, full.names=T, pattern = consensusPattern)
+stopifnot(length(astroConsensusFiles) > 0)
+astro_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(astroConsensusFiles)))
+stopifnot(length(astro_consensus_chromos) > 0)
+
+
+#================================================
+#================================================ LIVER
+#================================================
+
+
+
+#================================================
+#================================================ LYMPHOBlAST k562 - LEUKEMIAS
+#================================================
+
+lymphoCL1name <- "ENCFF614EKT"
+lymphoFold1 <- file.path("lympho/RPMI-7951/GSE106022", lymphoCL1name, "TopDom")
+lymphoCL1Files <- list.files(lymphoFold1, full.names=T, pattern = topdomPattern)
+stopifnot(length(lymphoCL1Files) > 0)
+lympho1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lymphoCL1Files)))
+stopifnot(length(lympho1_chromos) > 0)
+
+
+#================================================
+#================================================ PIPELINE
+#================================================
 
 
 pipConsensusname <- "pipeline_TopDom"
 pipConsensusFold <- file.path(setDir, "/mnt/ed4/marie/TAD_call_pipeline_TopDom", "consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final")
 pipConsensusFiles <- list.files(pipConsensusFold, full.names=T, pattern = consensusPattern)
 pip_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(pipConsensusFiles)))
+
+
+#================================================
+#================================================ INTERSECT CHROMOS
+#================================================
 
 intersectChromos <- Reduce(intersect, list(
   pip_consensus_chromos,
@@ -142,8 +231,20 @@ intersectChromos <- Reduce(intersect, list(
   pancreas1_chromos,
   prostate1_chromos,
   kidney1_chromos, kidney2_chromos,
-  skin1_chromos, skin2_chromos
+  skin1_chromos, skin2_chromos,
+
+
+colo1_chromos
+astro_consensus_chromos
+astro1_chromos
+astro2_chromos
+lympho1_chromo
+
 ))
+
+#================================================
+#================================================ ALL DATASETS VECTOR
+#================================================
 
 
 # 6 consensus + 11 datasets
@@ -154,6 +255,8 @@ all_ds <- c(
 "lungConsensus", 
 "kidneyConsensus", 
 "skinConsensus",
+
+
 "breastCL1", 
 "breastCL2", 
 "breastCL3",
@@ -164,8 +267,24 @@ all_ds <- c(
 "kidneyCL1", 
 "kidneyCL2",
 "skinCL1", 
-"skinCL2"
+"skinCL2",
+
+
+"coloCL1"
+
+"astroConsensus"
+
+"astroCL1"
+"astroCL2"
+
+"lympho1"
+
 )
+
+#================================================
+#================================================ NAME SETTINGS
+#================================================
+
 
 ds_mapping <- c(
 "breastCL1" = "HiCStein-MCF7-WT__hg19__.+TopDom.matrix" , 
@@ -184,6 +303,16 @@ ds_mapping <- c(
 
 "skinCL1" = "GSE106022_ENCFF614EKT", 
 "skinCL2" = "GSE105491_ENCFF458OWO"
+
+
+"coloCL1" = ""
+
+"astroCL1" = ""
+
+"astroCL2"= ""
+
+"lympho1" = ""
+
 )
 
  

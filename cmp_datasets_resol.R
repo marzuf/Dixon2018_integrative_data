@@ -47,10 +47,76 @@ source("datasets_settings.R")
 
 all_files <- list.files(mainFold, full.names=T, pattern="Rdata")
 
+all_files_rowSum <- all_files[grepl("_matrixRowSum.Rdata", all_files)]
+
+# for each  chromo -> row sum boxplot
+
+all_chromo <- paste0("chr", c(1:22, "X"))
+
+all_chrommo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
+  
+  chromo_files <- all_files_rowSum[grepl(paste0("_", chromo, "_"), all_files_rowSum)]
+  
+  chromo_DT <- foreach(chr_file = chromo_files, .combine='rbind') %do% {
+    
+    curr_ds <- gsub("^(.+)_(.+)_matrixRowSum.Rdata", "\\2", basename(chr_file))
+    
+    stopifnot(length(curr_ds) > 0)
+    
+    rowsum_chromo <- eval(parse(text = load(chr_file)))
+    
+    stopifnot(length(rowsum_chromo) > 0)
+    
+    data.frame(
+      dataset=curr_ds,
+      chromo = chromo,
+      rowIdx = 1:length(rowsum_chromo),
+      rowSum = rowsum_chromo,
+      stringsAsFactors = FALSE
+    )
+    
+    
+  }# end iterate over datasets
+  
+  p_chromo_all_ds <- ggplot(chromo_DT, aes(x = dataset, y = rowSum))+
+    geom_boxplot()+
+    ggtitle(paste0(chromo))
+  
+  outFile <- file.path(outFold, paste0("rowSum_", chromo, "_boxplot.", plotType))
+  ggsave(plot=p_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+  
+  chromo_DT
+  
+} # end iterate over chromos
+
+
+
+p_all_chromo_all_ds <- ggplot(chromo_DT, aes(x = dataset, y = rowSum))+
+  geom_boxplot()+
+  ggtitle(paste0(chromo))
+
+outFile <- file.path(outFold, paste0("all_chromo_all_datasets_boxplot_rowSum.", plotType))
+ggsave(plot=p_all_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
+cat(paste0("... written: ", outFile, "\n"))
+
+
+
+
+
+
+
+
+
+
+
+all_files <- all_files[!grepl("_matrixRowSum.Rdata", all_files)]
 curr_file <- all_files[1]
 all_resol_DT <- foreach(curr_file = all_files, .combine='rbind') %do% {
   eval(parse(text=load(curr_file)))
 }
+
+
 
 all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)
 
