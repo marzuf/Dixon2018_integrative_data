@@ -52,61 +52,113 @@ all_files_rowSum <- all_files[grepl("_matrixRowSum.Rdata", all_files)]
 # for each  chromo -> row sum boxplot
 
 all_chromo <- paste0("chr", c(1:22, "X"))
-
+chromo="chr1"
 all_chrommo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
   
   chromo_files <- all_files_rowSum[grepl(paste0("_", chromo, "_"), all_files_rowSum)]
   
   chromo_DT <- foreach(chr_file = chromo_files, .combine='rbind') %do% {
     
-    curr_ds <- gsub("^(.+)_(.+)_matrixRowSum.Rdata", "\\2", basename(chr_file))
+    curr_ds <- gsub("^(.+)_(chr.+)_matrixRowSum.Rdata", "\\1", basename(chr_file))
     
     stopifnot(length(curr_ds) > 0)
     
     rowsum_chromo <- eval(parse(text = load(chr_file)))
     
+    lowOut <- as.numeric(quantile(rowsum_chromo, probs=0.05))
+    highOut <- as.numeric(quantile(rowsum_chromo, probs=0.95))
+    
+    rowsum_chromo_noout <- rowsum_chromo
+    rowsum_chromo_noout[rowsum_chromo_noout <= lowOut | rowsum_chromo_noout >= highOut] <- NA
+    
     stopifnot(length(rowsum_chromo) > 0)
+    
+    stopifnot(length(rowsum_chromo) == length(rowsum_chromo_noout) )
+    
+    matrixDim <- length(rowsum_chromo)
     
     data.frame(
       dataset=curr_ds,
       chromo = chromo,
+      matrixDim = matrixDim,
       rowIdx = 1:length(rowsum_chromo),
       rowSum = rowsum_chromo,
+      rowSumNoOut = rowsum_chromo_noout,
       stringsAsFactors = FALSE
     )
-    
-    
   }# end iterate over datasets
   
-  p_chromo_all_ds <- ggplot(chromo_DT, aes(x = dataset, y = rowSum))+
-    geom_boxplot()+
-    ggtitle(paste0(chromo))
+  chromoDT$dataset_label <- unlist(sapply(chromoDT$dataset, function(x) names(ds_mapping)[ds_mapping == x]))
   
-  outFile <- file.path(outFold, paste0("rowSum_", chromo, "_boxplot.", plotType))
-  ggsave(plot=p_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
-  cat(paste0("... written: ", outFile, "\n"))
-  
+  for(var_to_plot in c("rowSum", "rowSumNoOut", "matrixDim")) {
+    
+    p_chromo_all_ds <- ggplot(chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
+      geom_boxplot()+
+      ggtitle(paste0(chromo, ": ", var_to_plot)) + 
+      scale_x_discrete(name="")+
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+      labs(colour  = "") +
+      theme( # Increase size of axis lines
+        # top, right, bottom and left
+        # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
+        plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+        plot.subtitle = element_text(hjust = 0.5, size=10),
+        panel.grid = element_blank(),
+        # panel.grid.major = element_line(colour = "lightpink"),
+        # strip.text.x = element_text(),
+        axis.text.x = element_text( hjust=1,vjust = 0.5, size=8, angle = 90),
+        axis.line.x = element_line(size = .2, color = "black"),
+        axis.line.y = element_line(size = .3, color = "black"),
+        #    axis.ticks.x = element_blank(),
+        axis.text.y = element_text(color="black", hjust=1,vjust = 0.5),
+        axis.title.y = element_text(color="black", size=12),
+        axis.title.x = element_text(color="black", size=12),
+        panel.border = element_blank(),
+        panel.background = element_rect(fill = "transparent"),
+        legend.background =  element_rect(),
+        legend.key = element_blank()
+      )
+    outFile <- file.path(outFold, paste0(var_to_plot, "_", chromo, "_boxplot.", plotType))
+    ggsave(plot=p_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
+    cat(paste0("... written: ", outFile, "\n"))
+  }
   chromo_DT
-  
 } # end iterate over chromos
 
+my_ggtit <- "all chromos"
 
-
-p_all_chromo_all_ds <- ggplot(chromo_DT, aes(x = dataset, y = rowSum))+
-  geom_boxplot()+
-  ggtitle(paste0(chromo))
-
-outFile <- file.path(outFold, paste0("all_chromo_all_datasets_boxplot_rowSum.", plotType))
-ggsave(plot=p_all_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
-cat(paste0("... written: ", outFile, "\n"))
-
-
-
-
-
-
-
-
+for(var_to_plot in c("rowSum", "rowSumNoOut", "matrixDim")) {
+  
+  p_all_chromo_all_ds <- ggplot(chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
+    geom_boxplot()+
+    ggtitle(paste0(var_to_plot, ": ", my_ggtit)) +
+    scale_x_discrete(name="")+
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+    labs(colour  = "") +
+    theme( # Increase size of axis lines
+      # top, right, bottom and left
+      # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),
+      plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+      plot.subtitle = element_text(hjust = 0.5, size=10),
+      panel.grid = element_blank(),
+      # panel.grid.major = element_line(colour = "lightpink"),
+      # strip.text.x = element_text(),
+      axis.text.x = element_text( hjust=1,vjust = 0.5, size=8, angle = 90),
+      axis.line.x = element_line(size = .2, color = "black"),
+      axis.line.y = element_line(size = .3, color = "black"),
+      #    axis.ticks.x = element_blank(),
+      axis.text.y = element_text(color="black", hjust=1,vjust = 0.5),
+      axis.title.y = element_text(color="black", size=12),
+      axis.title.x = element_text(color="black", size=12),
+      panel.border = element_blank(),
+      panel.background = element_rect(fill = "transparent"),
+      legend.background =  element_rect(),
+      legend.key = element_blank()
+    )
+  outFile <- file.path(outFold, paste0("all_chromos_all_datasets_boxplot_", var_to_plot, ".", plotType))
+  ggsave(plot=p_all_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
+  cat(paste0("... written: ", outFile, "\n"))
+}
 
 
 
@@ -115,7 +167,6 @@ curr_file <- all_files[1]
 all_resol_DT <- foreach(curr_file = all_files, .combine='rbind') %do% {
   eval(parse(text=load(curr_file)))
 }
-
 
 
 all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)

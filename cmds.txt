@@ -45,7 +45,6 @@ Rscript check_matResol.R lung/A549/ENCSR444WCZ/GSE105600_ENCFF852YOE_chromatin_i
 
 Rscript check_matResol.R lung/NCI-H460/ENCSR489OCU/GSE105725_ENCFF697NNX_chromatin_interactions_hg19_.+TopDom.matrix
 
-
 Rscript check_matResol.R pancreas/Panc1/GSE105566/ENCFF358MNA/GSE105566_ENCFF358MNA_chromatin_interactions_hg19.+TopDom.matrix
 
 Rscript check_matResol.R prostate/LNCaP/GSE105557/ENCFF270HJX/GSE105557_ENCFF270HJX_chromatin_interactions_hg19.+TopDom.matrix
