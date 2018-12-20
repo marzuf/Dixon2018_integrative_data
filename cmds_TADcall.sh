@@ -1,7 +1,11 @@
 #!/bin/bash
 
 
-# ./cmds_TADcall.sh
+# ./cmds_TADcall.sh GSE63525
+
+# ./cmds_TADcall.sh GSE105318_ENCFF439QFU
+
+# ./cmds_TADcall.sh GSE105318_ENCFF714TMN
 
 start_time=$(date -R)    
 
@@ -178,6 +182,63 @@ elif [[ $dataID == "GB238" ]]; then
     outFilePrefix="GSE81879_GSM2176970_${dataID}_40kb_norm_int_count"
 
 
+
+elif [[ $dataID == "GSE105194_ENCFF027IEO" ]]; then
+#astrocyte/cerebellum/GSE105194/ENCFF027IEO/GSE105194_ENCFF027IEO_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/cerebellum/GSE105194/ENCFF027IEO"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
+
+elif [[ $dataID == "GSE105194_ENCFF122YID" ]]; then
+#astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/cerebellum/GSE105194/ENCFF122YID"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
+elif [[ $dataID == "GSE105957_ENCFF478UBU" ]]; then
+#/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
+elif [[ $dataID == "GSE105957_ENCFF715HDW" ]]; then
+#/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF715HDW/GSE105957_ENCFF715HDW_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF715HDW"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
+
+elif [[ $dataID == "GSE105318_ENCFF439QFU" ]]; then
+#/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF439QFU/GSE105318_ENCFF439QFU_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF439QFU"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
+elif [[ $dataID == "GSE105318_ENCFF714TMN" ]]; then
+#/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+    inFold="/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF714TMN"
+    outFold="$inFold/TopDom"
+    mkdir -p outFold
+    inFilePrefix="${dataID}_chromatin_interactions_hg19_"
+    inFileSuffix="_TopDom.matrix"
+    outFilePrefix="${dataID}_40kb_"
+
 fi
 
 echo "... inFold = $inFold"
@@ -188,10 +249,10 @@ echo "... outFilePrefix = $outFilePrefix"
 
 
 
-all_chromos=( "chr"{1..22} "chrX" )
+#all_chromos=( "chr"{1..22} "chrX" )
 #all_chromos=( "chr1" )
 #all_chromos=( "chr21" )
-#all_chromos=( "chr9" )
+all_chromos=( "chr9" )
 
 parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $topdom_script -i $inFold/${inFilePrefix}{}${inFileSuffix} -o $outFold/${outFilePrefix}{} -w $window_size" -- ${all_chromos[@]}
 parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $topdom_script -i $inFold/${inFilePrefix}{}${inFileSuffix} -o $outFold/${outFilePrefix}{} -w $window_size" -- ${all_chromos[@]}

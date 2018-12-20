@@ -1,0 +1,442 @@
+
+######################################## 
+### h5 extraction
+######################################## 
+
+=> modify and run: cmds_h5.sh
+
+
+######################################## 
+### check h5 extraction
+######################################## 
+Rscript check_h5_extractChromoMatrix.R breast/T47D/ENCSR549MGQ_GSE105697/GSE105697_ENCFF364CWZ_chromatin_interactions_hg19_
+
+Rscript check_h5_extractChromoMatrix.R lung/A549/ENCSR444WCZ/GSE105600_ENCFF852YOE_chromatin_interactions_hg19_ 
+
+Rscript check_h5_extractChromoMatrix.R lung/NCI-H460/ENCSR489OCU/GSE105725_ENCFF697NNX_chromatin_interactions_hg19_
+
+
+Rscript check_h5_extractChromoMatrix.R pancreas/Panc1/GSE105566/ENCFF358MNA/GSE105566_ENCFF358MNA_chromatin_interactions_hg19
+
+Rscript check_h5_extractChromoMatrix.R prostate/LNCaP/GSE105557/ENCFF270HJX/GSE105557_ENCFF270HJX_chromatin_interactions_hg19
+
+Rscript check_h5_extractChromoMatrix.R kidney/Caki2/GSE105465/ENCFF777DUA/GSE105465_ENCFF777DUA_chromatin_interactions_hg19
+
+Rscript check_h5_extractChromoMatrix.R kidney/G401/GSE105235/ENCFF235TGH/GSE105235_ENCFF235TGH_chromatin_interactions_hg19
+
+Rscript check_h5_extractChromoMatrix.R skin/RPMI-7951/GSE106022/ENCFF614EKT/GSE106022_ENCFF614EKT_chromatin_interactions_hg19
+
+Rscript check_h5_extractChromoMatrix.R skin/SK-MEL-5/GSE105491/ENCFF458OWO/GSE105491_ENCFF458OWO_chromatin_interactions_hg19
+
+
+
+
+######################################## 
+### check matrix resolution
+######################################## 
+
+Rscript check_matResol.R breast/MCF7/GSM1631185_GSE66733/Hi-C_MCF7_MCF10A_processed_HiCfiles/Heatmaps/chrxchr/40kb/MCF7/HiCStein-MCF7-WT__hg19__.+TopDom.matrix
+
+Rscript check_matResol.R breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/GSE75070_HiCStein-MCF7-shGFP_hg19_.+TopDom.matrix
+
+Rscript check_matResol.R breast/T47D/ENCSR549MGQ_GSE105697/GSE105697_ENCFF364CWZ_chromatin_interactions_hg19_.+TopDom.matrix
+
+Rscript check_matResol.R lung/A549/ENCSR444WCZ/GSE105600_ENCFF852YOE_chromatin_interactions_hg19_.+TopDom.matrix
+
+Rscript check_matResol.R lung/NCI-H460/ENCSR489OCU/GSE105725_ENCFF697NNX_chromatin_interactions_hg19_.+TopDom.matrix
+
+
+Rscript check_matResol.R pancreas/Panc1/GSE105566/ENCFF358MNA/GSE105566_ENCFF358MNA_chromatin_interactions_hg19.+TopDom.matrix
+
+Rscript check_matResol.R prostate/LNCaP/GSE105557/ENCFF270HJX/GSE105557_ENCFF270HJX_chromatin_interactions_hg19.+TopDom.matrix
+
+Rscript check_matResol.R kidney/Caki2/GSE105465/ENCFF777DUA/GSE105465_ENCFF777DUA_chromatin_interactions_hg19.+TopDom.matrix
+
+Rscript check_matResol.R kidney/G401/GSE105235/ENCFF235TGH/GSE105235_ENCFF235TGH_chromatin_interactions_hg19.+TopDom.matrix
+
+Rscript check_matResol.R skin/RPMI-7951/GSE106022/ENCFF614EKT/GSE106022_ENCFF614EKT_chromatin_interactions_hg19.+TopDom.matrix
+
+Rscript check_matResol.R skin/SK-MEL-5/GSE105491/ENCFF458OWO/GSE105491_ENCFF458OWO_chromatin_interactions_hg19.+TopDom.matrix
+
+######################################## 
+### TAD calling
+######################################## 
+
+=> modify and run ./cmds_TADcall.sh
+
+ ./cmds_TADcall.sh GSE105566
+ ./cmds_TADcall.sh GSE105557
+ ./cmds_TADcall.sh GSE105465
+ ./cmds_TADcall.sh GSE105235
+ ./cmds_TADcall.sh GSE106022
+ ./cmds_TADcall.sh GSE105491
+
+
+
+
+######################################## 
+### convert TopDom BED
+######################################## 
+
+Rscript convertTopDom_BED.R 40000 breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom/GSM1631185_MCF7_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom/GSE75070_MCF7_shGFP_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 breast/T47D/ENCSR549MGQ_GSE105697/TopDom/GSE105697_ENCFF364CWZ_T47D_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 lung/A549/ENCSR444WCZ/TopDom/GSE105600_ENCFF852YOE_A549_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 lung/NCI-H460/ENCSR489OCU/TopDom/GSE105725_ENCFF697NNX_NCIH460_40kb_chr.+.bed$
+
+
+
+
+Rscript convertTopDom_BED.R 40000 prostate/LNCaP/GSE105557/ENCFF270HJX/TopDom/GSE105557_ENCFF270HJX_LNCaP_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom/GSE105566_ENCFF358MNA_Panc1_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 kidney/Caki2/GSE105465/ENCFF777DUA/TopDom/GSE105465_ENCFF777DUA_Caki2_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 kidney/G401/GSE105235/ENCFF235TGH/TopDom/GSE105235_ENCFF235TGH_G401_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom/GSE106022_ENCFF614EKT_RPMI7951_40kb_chr.+.bed$
+
+Rscript convertTopDom_BED.R 40000 skin/SK-MEL-5/GSE105491/ENCFF458OWO/TopDom/GSE105491_ENCFF458OWO_SKMEL5_40kb_chr.+.bed$
+
+
+
+astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom/GSE105194_ENCFF027IEO_40kb_chr1.bed
+astrocyte/cerebellum/GSE105194/ENCFF122YID/TopDom/GSE105194_ENCFF122YID_40kb_chr1.bed
+astrocyte/spinal_cord/GSE105957/ENCFF478UBU/TopDom/GSE105957_ENCFF478UBU_40kb_chr1.bed
+astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr1.bed
+colon/DLD1/GSE105318/ENCFF439QFU/TopDom/GSE105318_ENCFF439QFU_40kb_chr1.bed
+colon/DLD1/GSE105318/ENCFF714TMN/TopDom/GSE105318_ENCFF714TMN_40kb_chr1.bed
+leukemia/K562/GSE63525//TopDom/GSE63525_K562_40kb_ICE_chr1.bed
+
+
+Rscript convertTopDom_BED.R 40000 astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom/GSE105194_ENCFF027IEO_40kb_chr.+.bed$
+Rscript convertTopDom_BED.R 40000 astrocyte/cerebellum/GSE105194/ENCFF122YID/TopDom/GSE105194_ENCFF122YID_40kb_chr.+.bed$  #int ???
+Rscript convertTopDom_BED.R 40000 astrocyte/spinal_cord/GSE105957/ENCFF478UBU/TopDom/GSE105957_ENCFF478UBU_40kb_chr.+.bed$  # int ???
+Rscript convertTopDom_BED.R 40000 astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr.+.bed$
+Rscript convertTopDom_BED.R 40000 colon/DLD1/GSE105318/ENCFF439QFU/TopDom/GSE105318_ENCFF439QFU_40kb_chr.+.bed$
+Rscript convertTopDom_BED.R 40000 colon/DLD1/GSE105318/ENCFF714TMN/TopDom/GSE105318_ENCFF714TMN_40kb_chr.+.bed$   # int ???
+Rscript convertTopDom_BED.R 40000 leukemia/K562/GSE63525//TopDom/GSE63525_K562_40kb_ICE_chr.+.bed$
+
+Rscript check_matResol.R breast/T47D/ENCSR549MGQ_GSE105697/GSE105697_ENCFF364CWZ_chromatin_interactions_hg19_
+
+Rscript check_matResol.R astrocyte/cerebellum/GSE105194/ENCFF027IEO/GSE105194_ENCFF027IEO_chromatin_interactions_hg19_
+Rscript check_matResol.R astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_
+Rscript check_matResol.R astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_
+Rscript check_matResol.R astrocyte/spinal_cord/GSE105957/ENCFF715HDW/GSE105957_ENCFF715HDW_chromatin_interactions_hg19_
+Rscript check_matResol.R colon/DLD1/GSE105318/ENCFF439QFU/GSE105318_ENCFF439QFU_chromatin_interactions_hg19_
+Rscript check_matResol.R colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_
+Rscript check_matResol.R leukemia/K562/GSE63525/GSE63525_K562_40kb_ICE
+
+
+######################################## 
+### MoC between datasets
+######################################## 
+
+Rscript MoC_between_datasets.R  40000 \
+breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom GSM1631185_MCF7_40kb_chr.+final_domains.txt GSM1631185_MCF7 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom GSE75070_MCF7_shGFP_40kb_chr.+final_domains.txt GSE75070_MCF7_shGFP \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+Rscript MoC_between_datasets.R  40000 \
+breast/T47D/ENCSR549MGQ_GSE105697/TopDom GSE105697_ENCFF364CWZ_T47D_40kb_chr.+final_domains.txt GSE105697_ENCFF364CWZ_T47D \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+Rscript MoC_between_datasets.R  40000 \
+lung/A549/ENCSR444WCZ/TopDom GSE105600_ENCFF852YOE_A549_40kb_chr.+final_domains.txt GSE105600_ENCFF852YOE_A549 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+Rscript MoC_between_datasets.R  40000 \
+lung/NCI-H460/ENCSR489OCU/TopDom GSE105725_ENCFF697NNX_NCIH460_40kb_chr.+final_domains.txt GSE105725_ENCFF697NNX_NCIH460 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+Rscript MoC_between_datasets.R  40000 \
+pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom GSE105566_ENCFF358MNA_Panc1_40kb_chr.+final_domains.txt GSE105566_ENCFF358MNA_Panc1 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+prostate/LNCaP/GSE105557/ENCFF270HJX/TopDom GSE105557_ENCFF270HJX_LNCaP_40kb_chr.+final_domains.txt GSE105557_ENCFF270HJX_LNCaP \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+kidney/Caki2/GSE105465/ENCFF777DUA/TopDom GSE105465_ENCFF777DUA_Caki2_40kb_chr.+final_domains.txt GSE105465_ENCFF777DUA_Caki2 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+kidney/G401/GSE105235/ENCFF235TGH/TopDom GSE105235_ENCFF235TGH_G401_40kb_chr.+final_domains.txt GSE105235_ENCFF235TGH_G401 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom GSE106022_ENCFF614EKT_RPMI7951_40kb_chr.+final_domains.txt GSE106022_ENCFF614EKT_RPMI7951 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+Rscript MoC_between_datasets.R  40000 \
+skin/SK-MEL-5/GSE105491/ENCFF458OWO/TopDom GSE105491_ENCFF458OWO_SKMEL5_40kb_chr.+final_domains.txt GSE105491_ENCFF458OWO_SKMEL5 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+###### within breast
+
+Rscript MoC_between_datasets.R  40000 \
+breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom GSM1631185_MCF7_40kb_chr.+final_domains.txt GSM1631185_MCF7 \
+breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom GSE75070_MCF7_shGFP_40kb_chr.+final_domains.txt GSE75070_MCF7_shGFP 
+
+Rscript MoC_between_datasets.R  40000 \
+breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom GSM1631185_MCF7_40kb_chr.+final_domains.txt GSM1631185_MCF7 \
+breast/T47D/ENCSR549MGQ_GSE105697/TopDom GSE105697_ENCFF364CWZ_T47D_40kb_chr.+final_domains.txt GSE105697_ENCFF364CWZ_T47D 
+
+
+Rscript MoC_between_datasets.R  40000 \
+breast/T47D/ENCSR549MGQ_GSE105697/TopDom GSE105697_ENCFF364CWZ_T47D_40kb_chr.+final_domains.txt GSE105697_ENCFF364CWZ_T47D \
+breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom GSE75070_MCF7_shGFP_40kb_chr.+final_domains.txt GSE75070_MCF7_shGFP 
+
+
+##### within lung
+Rscript MoC_between_datasets.R  40000 \
+lung/A549/ENCSR444WCZ/TopDom GSE105600_ENCFF852YOE_A549_40kb_chr.+final_domains.txt GSE105600_ENCFF852YOE_A549 \
+lung/NCI-H460/ENCSR489OCU/TopDom GSE105725_ENCFF697NNX_NCIH460_40kb_chr.+final_domains.txt GSE105725_ENCFF697NNX_NCIH460 
+
+
+
+##### within kidney
+
+
+
+Rscript MoC_between_datasets.R  40000 \
+kidney/Caki2/GSE105465/ENCFF777DUA/TopDom GSE105465_ENCFF777DUA_Caki2_40kb_chr.+final_domains.txt GSE105465_ENCFF777DUA_Caki2 \
+kidney/G401/GSE105235/ENCFF235TGH/TopDom GSE105235_ENCFF235TGH_G401_40kb_chr.+final_domains.txt GSE105235_ENCFF235TGH_G401 
+
+
+##### within skin
+
+
+Rscript MoC_between_datasets.R  40000 \
+skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom GSE106022_ENCFF614EKT_RPMI7951_40kb_chr.+final_domains.txt GSE106022_ENCFF614EKT_RPMI7951 \
+skin/SK-MEL-5/GSE105491/ENCFF458OWO/TopDom GSE105491_ENCFF458OWO_SKMEL5_40kb_chr.+final_domains.txt GSE105491_ENCFF458OWO_SKMEL5
+
+
+
+##### between tissues and NEW CONSENSUS
+
+# breast consensus (all)
+Rscript MoC_between_datasets.R  40000 \
+FIND_CONSENSUS_TADS/GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D chr.+_conservedTADs.txt BREAST_CONSENSUS_MCF7_T47D \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+# breast consensus (mcf7)
+Rscript MoC_between_datasets.R  40000 \
+FIND_CONSENSUS_TADS/GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP chr.+_conservedTADs.txt BREAST_CONSENSUS_MCF7 \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+# lung consensus
+Rscript MoC_between_datasets.R  40000 \
+FIND_CONSENSUS_TADS/GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 chr.+_conservedTADs.txt LUNG_CONSENSUS \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+# skin consensus
+Rscript MoC_between_datasets.R  40000 \
+FIND_CONSENSUS_TADS/GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 chr.+_conservedTADs.txt SKIN_CONSENSUS \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+# kidney consensus
+Rscript MoC_between_datasets.R  40000 \
+FIND_CONSENSUS_TADS/GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401 chr.+_conservedTADs.txt KIDNEY_CONSENSUS \
+/mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final chr.+_conservedTADs.txt PIPELINE_CONSENSUS
+
+
+
+######################################## 
+### Consensus TADs
+######################################## 
+
+##### among breast
+
+#> among all
+
+Rscript find_consensusTADs.R  \
+breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom GSM1631185_MCF7_40kb_chr.+final_domains.txt GSM1631185_MCF7 \
+breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom GSE75070_MCF7_shGFP_40kb_chr.+final_domains.txt GSE75070_MCF7_shGFP \
+breast/T47D/ENCSR549MGQ_GSE105697/TopDom GSE105697_ENCFF364CWZ_T47D_40kb_chr.+final_domains.txt GSE105697_ENCFF364CWZ_T47D
+
+#> among MCF7
+
+Rscript find_consensusTADs.R  \
+breast/MCF7/GSM1631185_GSE66733/MCF7/TopDom GSM1631185_MCF7_40kb_chr.+final_domains.txt GSM1631185_MCF7 \
+breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom GSE75070_MCF7_shGFP_40kb_chr.+final_domains.txt GSE75070_MCF7_shGFP
+
+
+##### among lung
+Rscript find_consensusTADs.R  \
+lung/A549/ENCSR444WCZ/TopDom GSE105600_ENCFF852YOE_A549_40kb_chr.+final_domains.txt GSE105600_ENCFF852YOE_A549 \
+lung/NCI-H460/ENCSR489OCU/TopDom GSE105725_ENCFF697NNX_NCIH460_40kb_chr.+final_domains.txt GSE105725_ENCFF697NNX_NCIH460
+
+#### among skin
+Rscript find_consensusTADs.R  \
+skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom GSE106022_ENCFF614EKT_RPMI7951_40kb_chr.+final_domains.txt GSE106022_ENCFF614EKT_RPMI7951 \
+skin/SK-MEL-5/GSE105491/ENCFF458OWO/TopDom GSE105491_ENCFF458OWO_SKMEL5_40kb_chr.+final_domains.txt GSE105491_ENCFF458OWO_SKMEL5
+
+
+
+#### among kidney
+Rscript find_consensusTADs.R  \
+kidney/Caki2/GSE105465/ENCFF777DUA/TopDom GSE105465_ENCFF777DUA_Caki2_40kb_chr.+final_domains.txt GSE105465_ENCFF777DUA_Caki2 \
+kidney/G401/GSE105235/ENCFF235TGH/TopDom GSE105235_ENCFF235TGH_G401_40kb_chr.+final_domains.txt GSE105235_ENCFF235TGH_G401
+
+
+
+
+
+######################################## 
+### compare partitions
+########################################
+
+
+
+######################################## 
+### running pipeline
+########################################
+
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas # => ok
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSE58135_ERpos_tripleNeg # => running
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSE58135_ERpos_adjERpos # => running
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSE58135_tripleNeg_adjTripleNeg # => running
+
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D TCGAbrca_lum_bas # => ok
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D GSE58135_ERpos_tripleNeg # => running
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D GSE58135_ERpos_adjERpos # => running
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D GSE58135_tripleNeg_adjTripleNeg # => running
+
+
+
+./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_luad_mutKRAS # => ok
+
+
+######################################## 
+### compare pipeline results
+########################################
+
+
+### breast- TCGAbrca_lum_bas
+Rscript compare_pipeline_results.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+Rscript compare_pipeline_results.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D consensus
+Rscript compare_pipeline_results.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D
+
+### breast- GSE58135_ERpos_tripleNeg
+Rscript compare_pipeline_results.R GSE58135_ERpos_tripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+Rscript compare_pipeline_results.R GSE58135_ERpos_tripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D consensus
+Rscript compare_pipeline_results.R GSE58135_ERpos_tripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D
+
+### breast- GSE58135_ERpos_adjERpos
+Rscript compare_pipeline_results.R GSE58135_ERpos_adjERpos GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+Rscript compare_pipeline_results.R GSE58135_ERpos_adjERpos GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D consensus
+Rscript compare_pipeline_results.R GSE58135_ERpos_adjERpos GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D
+
+
+### breast- GSE58135_tripleNeg_adjTripleNeg
+Rscript compare_pipeline_results.R GSE58135_tripleNeg_adjTripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+Rscript compare_pipeline_results.R GSE58135_tripleNeg_adjTripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D consensus
+Rscript compare_pipeline_results.R GSE58135_tripleNeg_adjTripleNeg GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D
+
+### lung
+
+Rscript compare_pipeline_results.R TCGAluad_luad_mutKRAS GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 consensus
+
+
+
+######################################## 
+### prepare Rao data (rebin 10 kb raw -> 40 kb raw -> ICE)
+########################################
+
+./run_prep_Rao.sh -> prep_Rao_data.R
+
+# !!! problem chr9
+
+# modify and run 
+ ./cmds_TADcall.sh GSE63525
+
+########################################
+### GBM data
+########################################
+Rscript prep_GBM_GSE81879.R /mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/GSM2176966_GB176_norm_int.csv glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176966_GB176 norm_int_count.txt 40000 
+Rscript prep_GBM_GSE81879.R /mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/GSM2176967_GB180_norm_int.csv glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176967_GB180 norm_int_count.txt 40000 
+Rscript prep_GBM_GSE81879.R /mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/GSM2176968_GB182_norm_int.csv glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176968_GB182 norm_int_count.txt 40000 
+Rscript prep_GBM_GSE81879.R /mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/GSM2176969_GB183_norm_int.csv glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176969_GB183 norm_int_count.txt 40000 
+Rscript prep_GBM_GSE81879.R /mnt/etemp/marie/Dixon2018_integrative_data/glioblastoma/GSE81879/GSM2176970_GB238_norm_int.csv glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176970_GB238 norm_int_count.txt 40000 
+
+
+Rscript prep_GBM_data.R glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176966_GB176_chr20_40kb_norm_int_count.txt chr20 40000 40000 glioblastoma/GSE81879/COUNTS/GSE81879_GSM2176966_GB176_chr20_40kb_norm_int_count_TopDom.matrix
+
+ ./cmds_TADcall.sh GB180
+ ./cmds_TADcall.sh GB182
+ ./cmds_TADcall.sh GB183
+ ./cmds_TADcall.sh GB238
+
+
+
+GB180 (PTS)
+GB182 (PTS)
+GB183 (PTS)
+GB238 (PTS)
+
+########################################
+### astrocyte cerebellum - primary cell
+########################################
+
+
+# float matrix
+./cmds_TADcall.sh GSE105194_ENCFF027IEO
+
+./cmds_TADcall.sh GSE105194_ENCFF122YID
+
+
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom/GSE105194_ENCFF027IEO_40kb_chr10.bed
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/cerebellum/GSE105194/ENCFF122YID/TopDom/GSE105194_ENCFF122YID_40kb_chr10.bed
+
+
+Rscript convertTopDom_BED.R 40000 astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom/GSE105194_ENCFF027IEO_40kb_chr.+.bed$
+Rscript convertTopDom_BED.R 40000 astrocyte/cerebellum/GSE105194/ENCFF122YID/TopDom/GSE105194_ENCFF122YID_40kb_chr.+.bed$
+
+########################################
+### astrocyte spinal cord - primary cell
+########################################
+
+./cmds_TADcall.sh GSE105957_ENCFF715HDW
+
+./cmds_TADcall.sh GSE105957_ENCFF478UBU
+
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr1.bed
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU/TopDom/GSE105957_ENCFF478UBU_40kb_chr1.bed
+
+
+Rscript convertTopDom_BED.R 40000 astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr.+.bed$
+Rscript convertTopDom_BED.R 40000 astrocyte/spinal_cord/GSE105957/ENCFF478UBU/TopDom/GSE105957_ENCFF478UBU_40kb_chr.+.bed$
+
+
+########################################
+# try to normalize int matrices to see if I obtain matrices similar to float matrices
+########################################
+
+# Rscript norm_int_data.R colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_chr1_TopDom.matrix chr1 40000 40000 colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_chr1_ICE_TopDom.matrix
+
+# Rscript norm_int_data.R astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_TopDom.matrix chr1 40000 40000 astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_ICE_TopDom.matrix
+
+# Rscript norm_int_data.R astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_chr1_TopDom.matrix chr1 40000 40000 astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_chr1_ICE_TopDom.matrix
+
+
+
+/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+
+

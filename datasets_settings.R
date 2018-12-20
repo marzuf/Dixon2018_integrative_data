@@ -151,42 +151,98 @@ stopifnot(length(skin_consensus_chromos) > 0)
 
 
 
+
 #================================================
 #================================================ COLORECTAL
 #================================================
 
-coloCL1name <- "ENCFF614EKT"
-coloFold1 <- file.path("colo/RPMI-7951/GSE106022", coloCL1name, "TopDom")
+
+#/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF439QFU/GSE105318_ENCFF439QFU_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+#/mnt/etemp/marie/Dixon2018_integrative_data/colon/DLD1/GSE105318/ENCFF714TMN/GSE105318_ENCFF714TMN_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+#"coloCL1" = "GSE105318_ENCFF439QFU",
+#"coloCL2" = "GSE105318_ENCFF714TMN", # int
+
+
+
+coloCL1name <- "ENCFF439QFU"
+coloFold1 <- file.path("colon/DLD1/GSE105318", coloCL1name, "TopDom")
 coloCL1Files <- list.files(coloFold1, full.names=T, pattern = topdomPattern)
 stopifnot(length(coloCL1Files) > 0)
 colo1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(coloCL1Files)))
 stopifnot(length(colo1_chromos) > 0)
 
 
+## => int matrix
+#coloCL2name <- "ENCFF714TMN"
+#coloFold2 <- file.path("colon/DLD1/GSE105318", coloCL2name, "TopDom")
+#coloCL2Files <- list.files(coloFold2, full.names=T, pattern = topdomPattern)
+#stopifnot(length(coloCL2Files) > 0)
+#colo2_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(coloCL2Files)))
+#stopifnot(length(colo2_chromos) > 0)
+
+
+                    # NOT DONE
+                    #coloConsensusname <-  "GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5"
+                    #coloConsensusFold <- file.path("FIND_CONSENSUS_TADS", coloConsensusname)
+                    #coloConsensusFiles <- list.files(coloConsensusFold, full.names=T, pattern = consensusPattern)
+                    #stopifnot(length(coloConsensusFiles) > 0)
+                    #colo_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(coloConsensusFiles)))
+                    #stopifnot(length(colo_consensus_chromos) > 0)
+
 #================================================
 #================================================ ASTROCYTES
 #================================================
 
-astroCL1name <- "ENCFF614EKT"
-astroFold1 <- file.path("astro/RPMI-7951/GSE106022", astroCL1name, "TopDom")
+
+#astrocyte/cerebellum/GSE105194/ENCFF027IEO/GSE105194_ENCFF027IEO_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+#astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+#astrocyte/spinal_cord/GSE105957/ENCFF478UBU/GSE105957_ENCFF478UBU_chromatin_interactions_hg19_chr1_TopDom.matrix → int ???
+#astrocyte/spinal_cord/GSE105957/ENCFF715HDW/GSE105957_ENCFF715HDW_chromatin_interactions_hg19_chr1_TopDom.matrix → float
+
+# "astroCL1" = "GSE105194_ENCFF027IEO",
+# "astroCL2"= "GSE105194_ENCFF122YID", # int
+# "astroCL3"= "GSE105957_ENCFF715HDW",
+#"astroCL4"= "GSE105957_ENCFF478UBU", # int
+
+astroCL1name <- "ENCFF027IEO"
+astroFold1 <- file.path("astrocyte/cerebellum/GSE105194", astroCL1name, "TopDom")
 astroCL1Files <- list.files(astroFold1, full.names=T, pattern = topdomPattern)
 stopifnot(length(astroCL1Files) > 0)
 astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL1Files)))
 stopifnot(length(astro1_chromos) > 0)
 
-astroCL2name <- "ENCFF614EKT"
-astroFold2 <- file.path("astro/RPMI-7951/GSE106022", astroCL2name, "TopDom")
-astroCL2Files <- list.files(astroFold2, full.names=T, pattern = topdomPattern)
-stopifnot(length(astroCL2Files) > 0)
-astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL2Files)))
-stopifnot(length(astro2_chromos) > 0)
 
-astroConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
-astroConsensusFold <- file.path("FIND_CONSENSUS_TADS", astroConsensusname)
-astroConsensusFiles <- list.files(astroConsensusFold, full.names=T, pattern = consensusPattern)
-stopifnot(length(astroConsensusFiles) > 0)
-astro_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(astroConsensusFiles)))
-stopifnot(length(astro_consensus_chromos) > 0)
+# int
+#astroCL2name <- "ENCFF122YID"
+#astroFold2 <- file.path("astrocyte/cerebellum/GSE105194/ENCFF027IEO", astroCL2name, "TopDom")
+#astroCL2Files <- list.files(astroFold2, full.names=T, pattern = topdomPattern)
+#stopifnot(length(astroCL2Files) > 0)
+#astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL2Files)))
+#stopifnot(length(astro2_chromos) > 0)
+
+
+astroCL3name <- "ENCFF715HDW"
+astroFold3 <- file.path("astrocyte/spinal_cord/GSE105957", astroCL3name, "TopDom")
+astroCL3Files <- list.files(astroFold3, full.names=T, pattern = topdomPattern)
+stopifnot(length(astroCL3Files) > 0)
+astro3_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL3Files)))
+stopifnot(length(astro3_chromos) > 0)
+
+# int
+#astroCL4name <- "ENCFF478UBU"
+#astroFold4 <- file.path("astrocyte/spinal_cord/GSE105957", astroCL4name, "TopDom")
+#astroCL4Files <- list.files(astroFold4, full.names=T, pattern = topdomPattern)
+#stopifnot(length(astroCL4Files) > 0)
+#astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL4Files)))
+#stopifnot(length(astro4_chromos) > 0)
+
+# NOT DONE
+#astroConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
+#astroConsensusFold <- file.path("FIND_CONSENSUS_TADS", astroConsensusname)
+#astroConsensusFiles <- list.files(astroConsensusFold, full.names=T, pattern = consensusPattern)
+#stopifnot(length(astroConsensusFiles) > 0)
+#astro_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(astroConsensusFiles)))
+#stopifnot(length(astro_consensus_chromos) > 0)
 
 
 #================================================
@@ -199,12 +255,15 @@ stopifnot(length(astro_consensus_chromos) > 0)
 #================================================ LYMPHOBlAST k562 - LEUKEMIAS
 #================================================
 
-lymphoCL1name <- "ENCFF614EKT"
-lymphoFold1 <- file.path("lympho/RPMI-7951/GSE106022", lymphoCL1name, "TopDom")
-lymphoCL1Files <- list.files(lymphoFold1, full.names=T, pattern = topdomPattern)
-stopifnot(length(lymphoCL1Files) > 0)
-lympho1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lymphoCL1Files)))
-stopifnot(length(lympho1_chromos) > 0)
+#/mnt/etemp/marie/Dixon2018_integrative_data/leukemia/K562/GSE63525/GSE63525_K562_40kb_ICE_chr1_TopDom.matrix
+#"lympho1" = "GSE63525_K562"
+
+#lymphoCL1name <- "GSE63525_K562"
+#lymphoFold1 <- file.path("leukemia/K562/GSE63525", lymphoCL1name, "TopDom")
+#lymphoCL1Files <- list.files(lymphoFold1, full.names=T, pattern = topdomPattern)
+#stopifnot(length(lymphoCL1Files) > 0)
+#lympho1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(lymphoCL1Files)))
+#stopifnot(length(lympho1_chromos) > 0)
 
 
 #================================================
@@ -233,12 +292,19 @@ intersectChromos <- Reduce(intersect, list(
   kidney1_chromos, kidney2_chromos,
   skin1_chromos, skin2_chromos,
 
+#lympho1_chromo,
 
-colo1_chromos
-astro_consensus_chromos
-astro1_chromos
-astro2_chromos
-lympho1_chromo
+#colo_consensus_chromos,
+colo1_chromos,
+#colo2_chromos,
+
+#astro_consensus_chromos,
+astro1_chromos,
+#astro2_chromos,
+astro3_chromos
+#astro4_chromos,
+
+
 
 ))
 
@@ -269,15 +335,17 @@ all_ds <- c(
 "skinCL1", 
 "skinCL2",
 
+#"coloConsensus",
+"coloCL1",
+#"coloCL2", # int
 
-"coloCL1"
+#"astroConsensus",
+"astroCL1",
+#"astroCL2", # int
+"astroCL3"
+#"astroCL4",# int
 
-"astroConsensus"
-
-"astroCL1"
-"astroCL2"
-
-"lympho1"
+#"lympho1"
 
 )
 
@@ -302,19 +370,18 @@ ds_mapping <- c(
 "kidneyCL2" =  "GSE105235_ENCFF235TGH",
 
 "skinCL1" = "GSE106022_ENCFF614EKT", 
-"skinCL2" = "GSE105491_ENCFF458OWO"
+"skinCL2" = "GSE105491_ENCFF458OWO",
 
 
-"coloCL1" = ""
+"coloCL1" = "GSE105318_ENCFF439QFU",
+#"coloCL2" = "GSE105318_ENCFF714TMN", # int
 
-"astroCL1" = ""
+"astroCL1" = "GSE105194_ENCFF027IEO",
+# "astroCL2"= "GSE105194_ENCFF122YID", # int
+"astroCL3"= "GSE105957_ENCFF715HDW"
+#"astroCL4"= "GSE105957_ENCFF478UBU", # int
 
-"astroCL2"= ""
-
-"lympho1" = ""
+#"lympho1" = "GSE63525_K562"
 
 )
-
- 
-
 

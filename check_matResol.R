@@ -73,7 +73,7 @@ check_resolDT <- foreach(inFile = all_files, .combine='rbind') %do% {
   
   matrixRowSum <- rowSums(hic_DT, na.rm=T)
   
-  outFile <- file.path(outFold, paste0(dataset, "_", chromo, "_matrixRowSum.Rdata"))
+  outFile <- file.path(outFold, paste0(dataset, "_", curr_chromo, "_matrixRowSum.Rdata"))
   save(matrixRowSum, file=outFile)
   cat(paste0("... written: ", outFile, "\n"))
   

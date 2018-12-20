@@ -11,6 +11,19 @@ args <- commandArgs(trailingOnly = TRUE)
 
 stopifnot(length(args) == 5)
 
+inFile <- "leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr9/MAPQGE30/chr9_10kb.RAWobserved"
+chromo <- "chr9"
+binSize <- 10000
+newBinSize <- 40000
+outFile <- "foo.txt"
+
+inFile <- "leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr10/MAPQGE30/chr10_10kb.RAWobserved"
+chromo <- "chr10"
+binSize <- 10000
+newBinSize <- 40000
+outFile <- "foo.txt"
+
+
 inFile <- args[1]
 chromo <- args[2]
 binSize <- args[3]
