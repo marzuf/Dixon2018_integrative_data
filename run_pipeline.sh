@@ -2,15 +2,27 @@
 
 # ./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas
 
+# ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
+# ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_neural
+# ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
+
+# ./run_pipeline.sh GSE105318_ENCFF439QFU_DLD1 TCGAgbm_classical_mesenchymal TCGAcoad_msi_mss
+
 start_time=$(date -R)    
 set -e
+
+if [[ $# != 2 ]]; then
+    echo "invalid # of arguments"
+    exit 1
+fi
+
 
 runDir="/mnt/etemp/marie/Dixon2018_integrative_data"
 
 geneDataDir="$runDir/gene_data_final"
 
-TAD_DE_pipDir="/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2"
-TAD_DE_script="./zzz_run_given_step_given_data.sh"
+TAD_DE_pipDir="/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom"
+TAD_DE_script="./zzz_run_given_step_given_data_v2.sh"
 
 function mvBack {
   echo "... go back to my folder"
@@ -65,7 +77,7 @@ ncpu="20"
 step1=1     # prepare setting file
 step2=1     # run the pipeline
 
-
+#TAD_DE_pipSteps=( "0cleanInputTCGA" "1cleanInput" )
 TAD_DE_pipSteps=( "0cleanInputTCGA" "1cleanInput" "2" "3" "5" "4" "6" "7" "8c" "9" "10" "11" "13cleanInput" "14f2" "170revision2EZH2" )
 #TAD_DE_pipSteps=( "0cleanInput" "1cleanInput" "2" "3" "5" )
 #TAD_DE_pipSteps=( "0cleanInput" )
