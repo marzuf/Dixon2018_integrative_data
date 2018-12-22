@@ -66,7 +66,7 @@ step1=1     # prepare setting file
 step2=1     # run the pipeline
 
 
-TAD_DE_pipSteps=( "0cleanInput" "1cleanInput" "2" "3" "5" "4" "6" "7" "8c" "9" "10" "11" "13cleanInput" "14f2" "170revision2EZH2" )
+TAD_DE_pipSteps=( "0cleanInputTCGA" "1cleanInput" "2" "3" "5" "4" "6" "7" "8c" "9" "10" "11" "13cleanInput" "14f2" "170revision2EZH2" )
 #TAD_DE_pipSteps=( "0cleanInput" "1cleanInput" "2" "3" "5" )
 #TAD_DE_pipSteps=( "0cleanInput" )
 #TAD_DE_pipSteps=( "13cleanInput" )

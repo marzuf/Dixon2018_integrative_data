@@ -7,6 +7,8 @@ options(scipen=100)
 # Rscript prep_Rao_data.R leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr1/MAPQGE30/chr1_10kb.RAWobserved chr1 10000 40000 leukemia/K562/GSE63525/GSE63525_K562_40kb_ICE_chr1_TopDom.matrix
 # Rscript prep_Rao_data.R leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr21/MAPQGE30/chr21_10kb.RAWobserved chr21 10000 40000 leukemia/K562/GSE63525/GSE63525_K562_40kb_ICE_chr21_TopDom.matrix
 
+# Rscript prep_Rao_data.R leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr9/MAPQGE30/chr9_10kb.RAWobserved chr9 10000 10000 leukemia/K562/GSE63525/GSE63525_K562_10kb_ICE_chr9_TopDom.matrix
+
 args <- commandArgs(trailingOnly = TRUE)
 
 stopifnot(length(args) == 5)

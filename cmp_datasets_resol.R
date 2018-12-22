@@ -28,9 +28,14 @@ if(!SSHFS) system(paste0("rm -f ", logFile))
 if(SSHFS) logFile <- ""
 
 plotType <- "svg"
+plotType <- "png"
+
+widthBoxplot <- ifelse(plotType=="png", 600, 10)
+heightBoxplot <- ifelse(plotType=="png", 400, 7)
 
 widthBoxplot <- 10
 heightBoxplot <- 7
+
 
 strWidthSplit <- 35
 
@@ -53,13 +58,15 @@ all_files_rowSum <- all_files[grepl("_matrixRowSum.Rdata", all_files)]
 
 all_chromo <- paste0("chr", c(1:22, "X"))
 chromo="chr1"
-all_chrommo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
+all_chromo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
   
   chromo_files <- all_files_rowSum[grepl(paste0("_", chromo, "_"), all_files_rowSum)]
   
   chromo_DT <- foreach(chr_file = chromo_files, .combine='rbind') %do% {
     
     curr_ds <- gsub("^(.+)_(chr.+)_matrixRowSum.Rdata", "\\1", basename(chr_file))
+    
+    if(curr_ds == "GSE63525_K562_40kb_ICE" & chromo == "chr9") return(NULL)
     
     stopifnot(length(curr_ds) > 0)
     
@@ -83,16 +90,27 @@ all_chrommo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
       matrixDim = matrixDim,
       rowIdx = 1:length(rowsum_chromo),
       rowSum = rowsum_chromo,
+      rowSum_log10 = log10(rowsum_chromo),
       rowSumNoOut = rowsum_chromo_noout,
+      rowSumNoOut_log10 = log10(rowsum_chromo_noout),
       stringsAsFactors = FALSE
     )
   }# end iterate over datasets
   
-  chromoDT$dataset_label <- unlist(sapply(chromoDT$dataset, function(x) names(ds_mapping)[ds_mapping == x]))
+  stopifnot(chromo_DT$dataset %in% ds_mapping)
   
-  for(var_to_plot in c("rowSum", "rowSumNoOut", "matrixDim")) {
+  chromo_DT$dataset_label <- unlist(sapply(as.character(chromo_DT$dataset), function(x) names(ds_mapping)[ds_mapping == x]))
+  
+  for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut",  "rowSumNoOut_log10", "matrixDim")) {
     
-    p_chromo_all_ds <- ggplot(chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
+    tmp_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset_label")), data = chromo_DT, FUN=mean, na.rm=T)
+    tmp_DT <- tmp_DT[order(tmp_DT[, var_to_plot], decreasing=TRUE),]
+    
+    plot_chromo_DT <- chromo_DT[!is.infinite(chromo_DT[,var_to_plot]),]
+    plot_chromo_DT$dataset_label <- factor(as.character(plot_chromo_DT$dataset_label), levels = as.character(tmp_DT$dataset_label))
+    
+    
+    p_chromo_all_ds <- ggplot(plot_chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
       geom_boxplot()+
       ggtitle(paste0(chromo, ": ", var_to_plot)) + 
       scale_x_discrete(name="")+
@@ -122,14 +140,28 @@ all_chrommo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
     ggsave(plot=p_chromo_all_ds, file = outFile, width = widthBoxplot, height = heightBoxplot)
     cat(paste0("... written: ", outFile, "\n"))
   }
+  # stopifnot(!is.na(chromo_DT))
   chromo_DT
 } # end iterate over chromos
 
-my_ggtit <- "all chromos"
+outFile <- file.path(outFold, "all_chromo_DT.Rdata")
+save(all_chromo_DT, file = outFile)
+cat(paste0("... written: ", outFile, "\n"))
+# stopifnot(!is.na(all_chromo_DT))
 
-for(var_to_plot in c("rowSum", "rowSumNoOut", "matrixDim")) {
+my_ggtit <- "all chromos"
+var_to_plot <- "rowSum_log10"
+
+for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut", "rowSumNoOut_log10", "matrixDim")) {
   
-  p_all_chromo_all_ds <- ggplot(chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
+  tmp_DT <- all_chromo_DT[!is.infinite(all_chromo_DT[,var_to_plot]),]
+  tmp_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset_label")), data = tmp_DT, FUN=mean, na.rm=T)
+  tmp_DT <- tmp_DT[order(tmp_DT[, var_to_plot], decreasing=TRUE),]
+  
+  plot_all_chromo_DT <- all_chromo_DT[!is.infinite(all_chromo_DT[,var_to_plot]),]
+  plot_all_chromo_DT$dataset_label <- factor(as.character(plot_all_chromo_DT$dataset_label), levels = as.character(tmp_DT$dataset_label))
+  
+  p_all_chromo_all_ds <- ggplot(plot_all_chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
     geom_boxplot()+
     ggtitle(paste0(var_to_plot, ": ", my_ggtit)) +
     scale_x_discrete(name="")+
@@ -169,13 +201,17 @@ all_resol_DT <- foreach(curr_file = all_files, .combine='rbind') %do% {
 }
 
 
+
 all_resol_DT$countSum_log10 <- log10(all_resol_DT$countSum)
-
 all_vars <- colnames(all_resol_DT)[!colnames(all_resol_DT) %in% c("dataset", "chromo")]
-
 #all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
+all_resol_DT$datasetLabel <- unlist(sapply(as.character(all_resol_DT$dataset), function(x) names(ds_mapping[ds_mapping == x])))
 
-all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) names(ds_mapping[ds_mapping == x])))
+outFile <- file.path(outFold, "all_resol_DT.Rdata")
+save(all_resol_DT, file = outFile)
+cat(paste0("... written: ", outFile, "\n"))
+stopifnot(!is.na(all_resol_DT))
+
 
 var_to_plot = "rowAbove1000"
 for(var_to_plot in all_vars) {

@@ -236,13 +236,15 @@ stopifnot(length(astro3_chromos) > 0)
 #astro1_chromos <- unique(gsub(".+(chr.+)_final_domains.txt$", "\\1", basename(astroCL4Files)))
 #stopifnot(length(astro4_chromos) > 0)
 
+
+# based only on astrocL1 and astroCL3 (float matrices) FIND_CONSENSUS_TADS/GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal/chrX_conservedTADs.txt
 # NOT DONE
-#astroConsensusname <-  "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D"
-#astroConsensusFold <- file.path("FIND_CONSENSUS_TADS", astroConsensusname)
-#astroConsensusFiles <- list.files(astroConsensusFold, full.names=T, pattern = consensusPattern)
-#stopifnot(length(astroConsensusFiles) > 0)
-#astro_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(astroConsensusFiles)))
-#stopifnot(length(astro_consensus_chromos) > 0)
+astroConsensusname <-  "GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal"
+astroConsensusFold <- file.path("FIND_CONSENSUS_TADS", astroConsensusname)
+astroConsensusFiles <- list.files(astroConsensusFold, full.names=T, pattern = consensusPattern)
+stopifnot(length(astroConsensusFiles) > 0)
+astro_consensus_chromos <- unique(gsub("(chr.+)_conservedTADs.txt", "\\1", basename(astroConsensusFiles)))
+stopifnot(length(astro_consensus_chromos) > 0)
 
 
 #================================================
@@ -298,7 +300,7 @@ intersectChromos <- Reduce(intersect, list(
 colo1_chromos,
 #colo2_chromos,
 
-#astro_consensus_chromos,
+astro_consensus_chromos, # based only on astrocL1 and astroCL3 (float matrices)
 astro1_chromos,
 #astro2_chromos,
 astro3_chromos
@@ -339,7 +341,7 @@ all_ds <- c(
 "coloCL1",
 #"coloCL2", # int
 
-#"astroConsensus",
+"astroConsensus",  # based only on astrocL1 and astroCL3 (float matrices)
 "astroCL1",
 #"astroCL2", # int
 "astroCL3"
@@ -374,14 +376,15 @@ ds_mapping <- c(
 
 
 "coloCL1" = "GSE105318_ENCFF439QFU",
-#"coloCL2" = "GSE105318_ENCFF714TMN", # int
+"coloCL2" = "GSE105318_ENCFF714TMN", # int
 
 "astroCL1" = "GSE105194_ENCFF027IEO",
-# "astroCL2"= "GSE105194_ENCFF122YID", # int
-"astroCL3"= "GSE105957_ENCFF715HDW"
-#"astroCL4"= "GSE105957_ENCFF478UBU", # int
+ "astroCL2"= "GSE105194_ENCFF122YID", # int
+"astroCL3"= "GSE105957_ENCFF715HDW",
+"astroCL4"= "GSE105957_ENCFF478UBU", # int
 
-#"lympho1" = "GSE63525_K562"
+"lympho1" = "GSE63525_K562_40kb_ICE"
+
 
 )
 
