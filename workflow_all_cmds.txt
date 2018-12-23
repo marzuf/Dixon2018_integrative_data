@@ -1,0 +1,116 @@
+#############################
+1) download the h5 files
+#############################
+
+#############################
+2) Dekker: extract the intra-chromosomal matrices (assume normalized)
+#############################
+./cmds_h5.sh
+
+# -> set inside the script:
+all_genome_files=(
+"[...].h5"
+)
+
+# -> call to "convert_h5_TopDom_matrix.R"
+
+
+#############################
+2) Special cases: extract the intra-chromosomal matrices (assume normalized)
+#############################
+
+./run_prep_GBM.sh
+# -> inside hard-coded paths to files
+# -> call to "prep_GBM_data.R"
+
+./run_prep_Rao.sh
+# -> inside hard-coded paths to files
+# -> call to "prep_Rao_data.R"
+
+#############################
+3) TAD call with TopDom
+#############################
+
+./cmds_TADcall.sh <datasetID>
+# -> inside hard-coded paths to files according to <datasetID>
+
+
+#############################
+4) convert TopDom bed to final_domains format
+#############################
+
+Rscript convertTopDom_BED.R 40000 astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr.+.bed$
+
+
+#############################
+5) find consensus between 2 partitions (before assign_genes)
+#############################
+
+Rscript find_consensusTADs.R  \
+astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom GSE105194_ENCFF027IEO_40kb_chr.+final_domains.txt GSE105194_ENCFF027IEO_astroCerebellum \
+astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom GSE105957_ENCFF715HDW_40kb_chr.+final_domains.txt GSE105957_ENCFF715HDW_astroSpinal
+
+#############################
+5) if no consensus needed, prepare data format for assigning genes (before assign_genes)
+#############################
+
+./prep_assign_genes_singleDS.sh <inputFolder> <datasetID>
+
+#############################
+6) assign genes to TADs
+#############################
+
+./assign_genes.sh
+
+# -> inside the script, set "all_datasets"
+
+# -> call to "gene2TAD_consensus_version2.R"
+
+#############################
+7) run TAD DE pipeline
+#############################
+
+./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas
+
+# prepare setting files and run pipeline
+# -> call to TAD_DE_pipeline_v2_TopDom/zzz_run_given_step_given_data_v2.sh"
+
+#############################
+comparison different TAD partitions
+#############################
+Rscript cmp_datasets_matching.R
+Rscript cmp_datasets_MoC.R
+Rscript cmp_datasets_nbrTADs.R
+Rscript cmp_datasets_resol.R
+
+#############################
+comparison pipeline results
+#############################
+Rscript compare_pipeline_results.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+
+
+#############################
+check h5 retrieved data
+#############################
+
+
+Rscript check_h5_extractChromoMatrix.R breast/T47D/ENCSR549MGQ_GSE105697/GSE105697_ENCFF364CWZ_chromatin_interactions_hg19_
+
+#############################
+check resolution
+#############################
+
+Rscript check_matResol.R breast/T47D/ENCSR549MGQ_GSE105697/GSE105697_ENCFF364CWZ_chromatin_interactions_hg19_.+TopDom.matrix
+
+#############################
+TRY TO NORMALIZE AT 10KB THE CHR9
+#############################
+
+Rscript prep_Rao_data.R leukemia/K562/GSE63525/K562/10kb_resolution_intrachromosomal/chr9/MAPQGE30/chr9_10kb.RAWobserved chr9 10000 10000 leukemia/K562/GSE63525/GSE63525_K562_10kb_ICE_chr9_TopDom.matrix
+
+#############################
+ICE normalize the int matrices
+#############################
+
+# Rscript norm_int_data.R astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_TopDom.matrix chr1 40000 40000 astrocyte/cerebellum/GSE105194/ENCFF122YID/GSE105194_ENCFF122YID_chromatin_interactions_hg19_chr1_ICE_TopDom.matrix
+

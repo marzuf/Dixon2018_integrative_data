@@ -1,28 +1,28 @@
 # list of TCGA datasets (22.12.2018):
 TCGAacc_wt_mutCTNNB1
 TCGAblca_norm_blca
-TCGAbrca_lum_bas
+TCGAbrca_lum_bas                            # ./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas
 TCGAcesc_adeno_squam
 TCGAcoad_msi_mss
-TCGAgbm_classical_mesenchymal
-TCGAgbm_classical_neural
-TCGAgbm_classical_proneural
+TCGAgbm_classical_mesenchymal               # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
+TCGAgbm_classical_neural                    # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_neural
+TCGAgbm_classical_proneural                 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_proneural
 TCGAhnsc_HPVneg_HPVpos
-TCGAkich_norm_kich
+TCGAkich_norm_kich                          # ./run_pipeline.sh GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401 TCGAkich_norm_kich
 TCGAlaml_wt_mutFLT3
 TCGAlgg_IDHwt_IDHmutnc
 TCGAlihc_wt_mutCTNNB1
-TCGAluad_mutKRAS_mutEGFR
-TCGAluad_nonsmoker_smoker
-TCGAluad_wt_mutKRAS
+TCGAluad_mutKRAS_mutEGFR                    # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_mutKRAS_mutEGFR
+TCGAluad_nonsmoker_smoker                   # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_nonsmoker_smoker
+TCGAluad_wt_mutKRAS                         # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_wt_mutKRAS
 TCGAlusc_norm_lusc
 TCGApaad_wt_mutKRAS
 TCGAsarc_ddlps_lms
 TCGAsarc_ddlps_mfs
 TCGAsarc_lms_mfs
-TCGAskcm_lowInf_highInf
-TCGAskcm_wt_mutBRAF
-TCGAskcm_wt_mutCTNNB1
+TCGAskcm_lowInf_highInf                     # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_lowInf_highInf
+TCGAskcm_wt_mutBRAF                         # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutBRAF
+TCGAskcm_wt_mutCTNNB1                       # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutCTNNB1
 TCGAstad_EBVpos_gs
 TCGAstad_msi_gs
 TCGAstad_norm_gs
