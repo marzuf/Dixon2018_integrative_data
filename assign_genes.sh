@@ -21,7 +21,7 @@ ncpu="5"
 mainInFolder="/mnt/etemp/marie/Dixon2018_integrative_data/FIND_CONSENSUS_TADS"
 
 all_datasets=(
-"GSE105318_ENCFF439QFU_DLD1"
+"GSE105566_ENCFF358MNA_Panc1"
 )
 
 

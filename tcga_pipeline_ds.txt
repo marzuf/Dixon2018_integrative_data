@@ -1,33 +1,33 @@
 # list of TCGA datasets (22.12.2018):
-TCGAacc_wt_mutCTNNB1
-TCGAblca_norm_blca
+TCGAacc_wt_mutCTNNB1                        # ADRENOCORTICAL
+TCGAblca_norm_blca                          # BLADDER
 TCGAbrca_lum_bas                            # ./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas
-TCGAcesc_adeno_squam
-TCGAcoad_msi_mss
+TCGAcesc_adeno_squam                        # CERVIX
+TCGAcoad_msi_mss                            # ./run_pipeline.sh GSE105318_ENCFF439QFU_DLD1 TCGAcoad_msi_mss
 TCGAgbm_classical_mesenchymal               # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
 TCGAgbm_classical_neural                    # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_neural
 TCGAgbm_classical_proneural                 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_proneural
-TCGAhnsc_HPVneg_HPVpos
+TCGAhnsc_HPVneg_HPVpos                      # HEAD AND NECK
 TCGAkich_norm_kich                          # ./run_pipeline.sh GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401 TCGAkich_norm_kich
-TCGAlaml_wt_mutFLT3
-TCGAlgg_IDHwt_IDHmutnc
-TCGAlihc_wt_mutCTNNB1
+TCGAlaml_wt_mutFLT3                         # LEUKEMIA
+TCGAlgg_IDHwt_IDHmutnc                      # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAlgg_IDHwt_IDHmutnc
+TCGAlihc_wt_mutCTNNB1                       # LIVER
 TCGAluad_mutKRAS_mutEGFR                    # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_mutKRAS_mutEGFR
 TCGAluad_nonsmoker_smoker                   # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_nonsmoker_smoker
 TCGAluad_wt_mutKRAS                         # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_wt_mutKRAS
-TCGAlusc_norm_lusc
-TCGApaad_wt_mutKRAS
-TCGAsarc_ddlps_lms
-TCGAsarc_ddlps_mfs
-TCGAsarc_lms_mfs
+TCGAlusc_norm_lusc                          # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAlusc_norm_lusc
+TCGApaad_wt_mutKRAS                         # ./run_pipeline.sh GSE105566_ENCFF358MNA_Panc1 TCGApaad_wt_mutKRAS
+TCGAsarc_ddlps_lms                          # SARCOMA
+TCGAsarc_ddlps_mfs                          # SARCOMA
+TCGAsarc_lms_mfs                            # SARCOMA
 TCGAskcm_lowInf_highInf                     # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_lowInf_highInf
 TCGAskcm_wt_mutBRAF                         # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutBRAF
 TCGAskcm_wt_mutCTNNB1                       # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutCTNNB1
-TCGAstad_EBVpos_gs
-TCGAstad_msi_gs
-TCGAstad_norm_gs
-TCGAtgct_sem_nonsem
-TCGAthca_mut.RAS_mutBRAF
-TCGAthca_wt_mutBRAF
-TCGAucec_msi_cnl
+TCGAstad_EBVpos_gs                          # STOMACH
+TCGAstad_msi_gs                             # STOMACH                   
+TCGAstad_norm_gs                            # STOMACH
+TCGAtgct_sem_nonsem                         # TESTIS
+TCGAthca_mut.RAS_mutBRAF                    # THYROID
+TCGAthca_wt_mutBRAF                         # THYROID
+TCGAucec_msi_cnl                            # UTERUS
 

@@ -2,8 +2,9 @@
 
 # ./prep_assign_genes_singleDS.sh leukemia/K562/GSE63525/TopDom GSE63525_K562
 
-# ./prep_assign_genes_singleDS.sh colon/DLD1/GSE105318/ENCFF439QFU/TopDom GSE105318_ENCFF439QFU
+# ./prep_assign_genes_singleDS.sh colon/DLD1/GSE105318/ENCFF439QFU/TopDom GSE105318_ENCFF439QFU_DLD1
 
+# ./prep_assign_genes_singleDS.sh pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom GSE105566_ENCFF358MNA_Panc1
 
 #set -e
 

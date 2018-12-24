@@ -4,20 +4,39 @@
 
 
 #### run 22.12.2018:
+
+# GBM
 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_neural
 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_proneural
+
+# COLORECTAL
 # ./run_pipeline.sh GSE105318_ENCFF439QFU_DLD1 TCGAcoad_msi_mss
+
+# BREAST
 # ./run_pipeline.sh GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP TCGAbrca_lum_bas
+
+# KIDNEY
 # ./run_pipeline.sh GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401 TCGAkich_norm_kich
 
+# LUNG
 # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_mutKRAS_mutEGFR
 # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_nonsmoker_smoker
 # ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAluad_wt_mutKRAS
+# ./run_pipeline.sh GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 TCGAlusc_norm_lusc
 
+# SKIN
 # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_lowInf_highInf
 # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutBRAF
 # ./run_pipeline.sh GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 TCGAskcm_wt_mutCTNNB1
+
+
+# PANCREAS
+
+# ./run_pipeline.sh GSE105566_ENCFF358MNA_Panc1 TCGApaad_wt_mutKRAS
+
+# PROSTATE
+
 
 start_time=$(date -R)    
 set -e
@@ -121,6 +140,15 @@ new_TADpos_file="$geneDataDir/$hic_dataset/genes2tad/all_assigned_regions.txt"
 #12893       chr1    761586  762902  chr1_TAD1
 new_gene2tad_file="$geneDataDir/$hic_dataset/genes2tad/all_genes_positions.txt"
 
+if [[ ! -f  $new_TADpos_file ]]; then
+    echo "... new_TADpos_file $new_TADpos_file does not exist !"
+    exit 1
+fi
+
+if [[ ! -f  $new_gene2tad_file ]]; then
+    echo "... new_gene2tad_file $new_gene2tad_file does not exist !"
+    exit 1
+fi
 
 if [[ "$step1" -eq 1 ]] ; then
 
