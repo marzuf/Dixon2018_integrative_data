@@ -32,35 +32,35 @@ all_chromos=( "chr1" "chr9" "chr21" )
 
 all_dataset_id=(
 # breast
-"GSE105697_ENCFF364CWZ_T47D"
-"GSM1631185_MCF7"
-"GSM1631185_MCF7"
-# lung
-"GSE105600_ENCFF852YOE_A549"
-"GSE105725_ENCFF697NNX_NCIH460"
-# kidney
-"GSE105465_ENCFF777DUA_Caki2"
-"GSE105235_ENCFF235TGH_G401"
+#"GSE105697_ENCFF364CWZ_T47D"
+#"GSM1631185_MCF7"
+#"GSM1631185_MCF7"
+## lung
+#"GSE105600_ENCFF852YOE_A549"
+#"GSE105725_ENCFF697NNX_NCIH460"
+## kidney
+#"GSE105465_ENCFF777DUA_Caki2"
+#"GSE105235_ENCFF235TGH_G401"
 # leukemia
 "GSE63525_K562"
 # prostate
-"GSE105557_ENCFF270HJX_LNCaP"
-# pancreas
-"GSE105566_ENCFF358MNA_Panc1"
-# colorectal
-"GSE105318_ENCFF439QFU_DLD1"
-"GSE105318_ENCFF714TMN_DLD1_int"
-"GSE105318_ENCFF714TMN_DLD1_intICE"
-# skin
-"GSE106022_ENCFF614EKT_RPMI7951"
-"GSE105491_ENCFF458OWO_SKMEL5"
-# astrocyte cerebellum
-"GSE105194_ENCFF027IEO_ASTROCEREB"
-"GSE105194_ENCFF122YID_ASTROCEREB_int"
-"GSE105194_ENCFF122YID_ASTROCEREB_intICE"
-# astrocyte spinal cord
-"GSE105957_ENCFF478UBU_ASTROSPINAL"
-"GSE105957_ENCFF715HDW_ASTROSPINAL_int"
+#"GSE105557_ENCFF270HJX_LNCaP"
+## pancreas
+#"GSE105566_ENCFF358MNA_Panc1"
+## colorectal
+#"GSE105318_ENCFF439QFU_DLD1"
+#"GSE105318_ENCFF714TMN_DLD1_int"
+#"GSE105318_ENCFF714TMN_DLD1_intICE"
+## skin
+#"GSE106022_ENCFF614EKT_RPMI7951"
+#"GSE105491_ENCFF458OWO_SKMEL5"
+## astrocyte cerebellum
+#"GSE105194_ENCFF027IEO_ASTROCEREB"
+#"GSE105194_ENCFF122YID_ASTROCEREB_int"
+#"GSE105194_ENCFF122YID_ASTROCEREB_intICE"
+## astrocyte spinal cord
+#"GSE105957_ENCFF478UBU_ASTROSPINAL"
+#"GSE105957_ENCFF715HDW_ASTROSPINAL_int"
 "GSE105957_ENCFF715HDW_ASTROSPINAL_intICE"
 )
 
@@ -167,7 +167,7 @@ for dataID in "${all_dataset_id[@]}"; do
     ################
     elif [[ $dataID == "GSE63525_K562" ]]; then
         matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/leukemia/K562/GSE63525"
-        matrixPrefix="GSE63525_K562"
+        matrixPrefix="GSE63525_K562_40kb_ICE_"
         matrixSuffix="_TopDom.matrix"
         outFolder="DRAW_ENCODE_MATRIX/GSE63525_K562"
 
@@ -195,23 +195,24 @@ for dataID in "${all_dataset_id[@]}"; do
     ################
     ### ASTROCYTE - SPINAL CORD
     ################
-    elif [[ $dataID == "GSE105957_ENCFF478UBU_ASTROSPINAL" ]]; then
-        matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU"
-        matrixPrefix="GSE105957_ENCFF478UBU_chromatin_interactions_hg19_"
-        matrixSuffix="_TopDom.matrix"
-        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF478UBU_ASTROSPINAL"
-
     elif [[ $dataID == "GSE105957_ENCFF715HDW_ASTROSPINAL_int" ]]; then
         matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF715HDW"
         matrixPrefix="GSE105957_ENCFF715HDW_chromatin_interactions_hg19_"
         matrixSuffix="_TopDom.matrix"
-        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF715HDW_ASTROSPINAL_int"
+        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF715HDW_ASTROSPINAL"
 
-    elif [[ $dataID == "GSE105957_ENCFF715HDW_ASTROSPINAL_intICE" ]]; then
-        matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF715HDW"
+    elif [[ $dataID == "GSE105957_ENCFF478UBU_ASTROSPINAL" ]]; then
+        matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU"
+        matrixPrefix="GSE105957_ENCFF478UBU_chromatin_interactions_hg19_"
+        matrixSuffix="_TopDom.matrix"
+        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF478UBU_ASTROSPINAL_int"
+
+    elif [[ $dataID == "GSE105957_ENCFF478UBU_ASTROSPINAL_intICE" ]]; then
+        matrixFolder="/mnt/etemp/marie/Dixon2018_integrative_data/astrocyte/spinal_cord/GSE105957/ENCFF478UBU"
         matrixPrefix="GSE105957_ENCFF715HDW_chromatin_interactions_hg19_"
         matrixSuffix="_ICE_TopDom.matrix"
-        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF715HDW_ASTROSPINAL_intICE"
+        outFolder="DRAW_ENCODE_MATRIX/GSE105957_ENCFF478UBU_ASTROSPINAL_intICE"
+
 
     ################
     ### PROSTATE
