@@ -5,8 +5,8 @@ source("utils_fct.R")
 
 if(SSHFS) setwd("/media/electron/mnt/etemp/marie/Dixon2018_integrative_data")
 
-cat("> START compare_pipeline_results.R", "\n")
-# Rscript compare_pipeline_results.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
+cat("> START compare_pipeline_signif.R", "\n")
+# Rscript compare_pipeline_signif.R TCGAbrca_lum_bas GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP consensus
 
 # pipeline gene list
 # ENSG00000000003 ENSG00000000005 ENSG00000000419 ENSG00000000457 ENSG00000000460 
@@ -16,6 +16,9 @@ ds1 <- "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP"
 ds2 <- "consensus"
 
 args <- commandArgs(trailingOnly = TRUE)
+
+if(length(args) == 2) args[3] <- "consensus"
+
 stopifnot(length(args) == 3)
 exprDS <- args[1]
 ds1 <- args[2]

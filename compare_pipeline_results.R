@@ -20,6 +20,7 @@ ds2 <- "consensus"
 signifThresh <- 0.05 
 
 args <- commandArgs(trailingOnly = TRUE)
+if(length(args) == 2) args[3] <- "consensus"
 stopifnot(length(args) == 3)
 exprDS <- args[1]
 ds1 <- args[2]
