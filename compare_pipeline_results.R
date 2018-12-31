@@ -17,8 +17,6 @@ exprDS <- "TCGAbrca_lum_bas"
 ds1 <- "GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP"
 ds2 <- "consensus"
 
-signifThresh <- 0.05 
-
 args <- commandArgs(trailingOnly = TRUE)
 if(length(args) == 2) args[3] <- "consensus"
 stopifnot(length(args) == 3)
@@ -33,9 +31,15 @@ plotType <- "svg"
 myHeight <- ifelse(plotType == "png", 400, 7)
 myWidth <- ifelse(plotType == "png", 400, 7)
 
- logFile <- file.path(outFold, paste0("compare_pip_results_", ds1, "_", ds2, "_logFile.txt"))
- if(SSHFS) logFile <- ""
- if(!SSHFS) system(paste0("rm -f ", logFile))
+logFile <- file.path(outFold, paste0("compare_pip_results_", ds1, "_", ds2, "_logFile.txt"))
+if(SSHFS) logFile <- ""
+if(!SSHFS) system(paste0("rm -f ", logFile))
+
+signifThresh <- 0.05 
+
+txt <- paste0("!!! HARD-CODED for TAD selection: signifThresh = ", signifThresh, "\n")
+printAndLog(txt, logFile)
+
 
 ############################## DATASET 1
 stopifnot(ds1 != "consensus")
@@ -198,7 +202,8 @@ printAndLog(txt, logFile)
 txt <- paste0("... # commonGenes in signif. TADs in ",  ds2, "\t=\t", length(signifGenes2), "\n")
 printAndLog(txt, logFile)
 
-nCommonSignif <- length(intersect(signifGenes1,signifGenes2))
+commonSignif <- intersect(signifGenes1,signifGenes2)
+nCommonSignif <- length(commonSignif)
 
 txt <- paste0("... # commonGenes in signif. TADs common ", ds1, " vs. ",  ds2, "\t=\t", 
               nCommonSignif, 
@@ -206,6 +211,42 @@ txt <- paste0("... # commonGenes in signif. TADs common ", ds1, " vs. ",  ds2, "
               round(nCommonSignif/length(signifGenes2)*100, 2) , " % ", ds2, ")",
               "\n")
 printAndLog(txt, logFile)
+
+stopifnot(commonSignif %in% rownames(g2t1_dt_withRank))
+g2t1_dt_withRank_onlySignif <- g2t1_dt_withRank[commonSignif,]
+stopifnot(g2t1_dt_withRank_onlySignif$entrezID == rownames(g2t1_dt_withRank_onlySignif))
+stopifnot(g2t1_dt_withRank_onlySignif$entrezID == commonSignif)
+
+stopifnot(commonSignif %in% rownames(g2t2_dt_withRank))
+g2t2_dt_withRank_onlySignif <- g2t2_dt_withRank[commonSignif,]
+stopifnot(g2t2_dt_withRank_onlySignif$entrezID == rownames(g2t2_dt_withRank_onlySignif))
+stopifnot(g2t2_dt_withRank_onlySignif$entrezID == commonSignif)
+
+############################################################### density - genes from signif TADs only
+
+mySub <- paste0(ds1, " vs. ", ds2, " (genes from signif. TADs only)")
+
+outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_gene_tad_rank_density_onlySignifTADs.", plotType))
+do.call(plotType, list(outFile, height=myHeight, width=myWidth))
+
+densplot(x=g2t1_dt_withRank_onlySignif$region_rank,
+         y=g2t2_dt_withRank_onlySignif$region_rank,
+         xlab=myxlab,
+         ylab=myylab,
+         pch = 16, cex = 0.7,
+         main = myTit
+)
+mtext(side=3, text = mySub)
+add_curv_fit(x = g2t1_dt_withRank_onlySignif$region_rank, 
+             y=g2t1_dt_withRank_onlySignif$region_rank, withR2 = FALSE, lty=2, col="darkgray")
+
+addCorr(x=g2t1_dt_withRank_onlySignif$region_rank, 
+        y = g2t1_dt_withRank_onlySignif$region_rank,
+        bty="n",
+        legPos="bottomright")
+foo <- dev.off()
+cat(paste0("... written: ", outFile, "\n"))
+
 
 ######################################################################################
 ######################################################################################

@@ -1,0 +1,8 @@
+--------------------------------------------------------------------------------------
+Fri, 28 Dec 2018 19:37:48 +0100
+----- Script starts -----
+*** start ENCLB022KPF_ENCFF419ZIV_a1
+*** start ENCLB022KPF_ENCFF564ZRQ_b1
+*** start ENCLB022KPF_ENCFF652ZBK_c1
+*** start ENCLB022KPF_ENCFF613EQX_d1
+*** start ENCLB022KPF_ENCFF779SUW_e1

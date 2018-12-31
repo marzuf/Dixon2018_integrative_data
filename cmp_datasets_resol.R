@@ -101,7 +101,18 @@ all_chromo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
   
   chromo_DT$dataset_label <- unlist(sapply(as.character(chromo_DT$dataset), function(x) names(ds_mapping)[ds_mapping == x]))
   
+  var_names <- c(
+    "rowSum"= "Hi-C matrix row sum", 
+    "rowSum_log10"= "Hi-C matrix row sum [log10]", 
+    "rowSumNoOut"= "Hi-C matrix row sum (5-95% quantile)", 
+    "rowSumNoOut_log10" = "Hi-C matrix row sum (5-95% quantile) [log10]", 
+     "matrixDim"= "Hi-C matrix dimension"
+  )
+  
   for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut",  "rowSumNoOut_log10", "matrixDim")) {
+    
+    var_tit <- var_names[var_to_plot]
+    stopifnot(!is.na(var_tit))
     
     tmp_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset_label")), data = chromo_DT, FUN=mean, na.rm=T)
     tmp_DT <- tmp_DT[order(tmp_DT[, var_to_plot], decreasing=TRUE),]
@@ -112,9 +123,11 @@ all_chromo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
     
     p_chromo_all_ds <- ggplot(plot_chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
       geom_boxplot()+
-      ggtitle(paste0(chromo, ": ", var_to_plot)) + 
+      # ggtitle(paste0(chromo, ": ", var_to_plot)) + 
+      ggtitle(paste0(chromo, ": ", var_tit)) + 
       scale_x_discrete(name="")+
-      scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+      # scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+      scale_y_continuous(name = paste0(var_tit), breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
       labs(colour  = "") +
       theme( # Increase size of axis lines
         # top, right, bottom and left
@@ -154,6 +167,9 @@ var_to_plot <- "rowSum_log10"
 
 for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut", "rowSumNoOut_log10", "matrixDim")) {
   
+  var_tit <- var_names[var_to_plot]
+  stopifnot(!is.na(var_tit))
+  
   tmp_DT <- all_chromo_DT[!is.infinite(all_chromo_DT[,var_to_plot]),]
   tmp_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset_label")), data = tmp_DT, FUN=mean, na.rm=T)
   tmp_DT <- tmp_DT[order(tmp_DT[, var_to_plot], decreasing=TRUE),]
@@ -163,9 +179,11 @@ for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut", "rowSumNoOut_log10
   
   p_all_chromo_all_ds <- ggplot(plot_all_chromo_DT, aes_string(x = "dataset_label", y = var_to_plot))+
     geom_boxplot()+
-    ggtitle(paste0(var_to_plot, ": ", my_ggtit)) +
+    # ggtitle(paste0(var_to_plot, ": ", my_ggtit)) +
+    ggtitle(paste0(var_tit, ": ", my_ggtit)) +
     scale_x_discrete(name="")+
-    scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+    # scale_y_continuous(breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
+    scale_y_continuous(name=paste0(var_tit), breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
     labs(colour  = "") +
     theme( # Increase size of axis lines
       # top, right, bottom and left
@@ -207,6 +225,10 @@ all_vars <- colnames(all_resol_DT)[!colnames(all_resol_DT) %in% c("dataset", "ch
 #all_resol_DT$datasetLabel <- unlist(sapply(all_resol_DT$dataset, function(x) paste0(stri_wrap(str = x, width = strWidthSplit), collapse="\n")))
 all_resol_DT$datasetLabel <- unlist(sapply(as.character(all_resol_DT$dataset), function(x) names(ds_mapping[ds_mapping == x])))
 
+var_names["countSum"] <- "Hi-C matrix tot. contact sum"
+var_names["countSum_log10"] <- "Hi-C matrix tot. contact sum [log10]"
+var_names["rowAbove1000"] <- "Ratio of rows with > 1000 counts"
+
 outFile <- file.path(outFold, "all_resol_DT.Rdata")
 save(all_resol_DT, file = outFile)
 cat(paste0("... written: ", outFile, "\n"))
@@ -215,6 +237,9 @@ stopifnot(!is.na(all_resol_DT))
 
 var_to_plot = "rowAbove1000"
 for(var_to_plot in all_vars) {
+  
+  var_tit <- var_names[var_to_plot]
+  stopifnot(!is.na(var_tit))
   
   mean_all_resol_DT <- aggregate(as.formula(paste0(var_to_plot, " ~ dataset")), FUN=mean, data = all_resol_DT)
   mean_all_resol_DT <- mean_all_resol_DT[order(mean_all_resol_DT[, var_to_plot], decreasing = TRUE),]
@@ -230,7 +255,8 @@ for(var_to_plot in all_vars) {
     # geom_jitter(aes(colour = chromo)) +
     scale_x_discrete(name="")+
     # scale_y_continuous(name=paste0("-log10(", padjVarGO, ")"),
-    scale_y_continuous(name=paste0(var_to_plot),
+    scale_y_continuous(name=paste0(var_tit),
+                       # name=paste0(var_to_plot),
                        breaks = scales::pretty_breaks(n = 10))+ #, limits = c(0, max(auc_DT_m$value)+0.05))+
     # coord_cartesian(expand = FALSE) +
     # scale_fill_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
@@ -238,7 +264,8 @@ for(var_to_plot in all_vars) {
     # scale_colour_manual(values = c(selectGenes = "dodgerblue4", selectTADs_genes = "darkorange2"),
     #                     labels = c(selectGenes = "selectGenes", selectTADs_genes = "selectTADs_genes"), guide = F)+
     labs(colour  = "") +
-    ggtitle(label = paste0(var_to_plot))+
+    # ggtitle(label = paste0(var_to_plot))+
+    ggtitle(label = paste0(var_tit))+
     theme( # Increase size of axis lines
       # top, right, bottom and left
       # plot.margin = unit(c(1, 1, 4.5, 1), "lines"),

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-exit 0
+# ./liver_buildHiC_cmds.sh
 
 logfile="liver_buildHiC_logfile.txt"
 rm -f $logfile
@@ -18,46 +18,36 @@ genomeFile="/mnt/ndata/daniele/hpv_integration/Data/Homo_sapiens.GRCh37.75.dna_s
 
 bwaBin="/mnt/ed4/marie/software/bwa-0.7.17/bwa"
 
+fastqFold="/mnt/etemp/marie/Dixon2018_integrative_data/liver/GSE105381"
+
 
 # -k INT        minimum seed length [19]
 #       -t INT        number of threads [1]
 #       -m INT        perform at most INT rounds of mate rescues for each read [50]
 
 
-all_files_1=("ENCLB022KPF_ENCFF419ZIV_a1" "ENCLB022KPF_ENCFF564ZRQ_b1" "ENCLB022KPF_ENCFF652ZBK_c1" "ENCLB022KPF_ENCFF613EQX_d1" "ENCLB022KPF_ENCFF779SUW_e1" "ENCLB625TGE_ENCFF932XVZ_a1" "ENCLB625TGE_ENCFF181XUK_b1" "ENCLB625TGE_ENCFF385SWQ_c1" "ENCLB625TGE_ENCFF973IEP_d1" "ENCLB625TGE_ENCFF846FHX_e1" )
-all_files_2=("ENCLB022KPF_ENCFF122SLQ_a2" "ENCLB022KPF_ENCFF428VHR_b2" "ENCLB022KPF_ENCFF568YFJ_c2" "ENCLB022KPF_ENCFF969ZME_d2" "ENCLB022KPF_ENCFF936TOC_e2" "ENCLB625TGE_ENCFF024QBA_a2" "ENCLB625TGE_ENCFF574TXX_b2" "ENCLB625TGE_ENCFF424TRG_c2" "ENCLB625TGE_ENCFF602QHH_d2" "ENCLB625TGE_ENCFF616FUR_e2" )
-
-len1=${#all_files_1[@]}
-len2=${#all_files_2[@]}
-
-if [[ $len1 -ne $len2 ]]; then
-    echo "ERROR: not same number of files"
-    exit 1
-fi
-
-
-for i in "${!all_files_1[@]}"; do 
-
-
-    file1="${all_files_1[$i]}"
-    file2="${all_files_2[$i]}"
+all_files=(
+"ENCLB022KPF_ENCFF419ZIV_a1" "ENCLB022KPF_ENCFF564ZRQ_b1" "ENCLB022KPF_ENCFF652ZBK_c1" "ENCLB022KPF_ENCFF613EQX_d1" "ENCLB022KPF_ENCFF779SUW_e1" "ENCLB625TGE_ENCFF932XVZ_a1" "ENCLB625TGE_ENCFF181XUK_b1" "ENCLB625TGE_ENCFF385SWQ_c1" "ENCLB625TGE_ENCFF973IEP_d1" "ENCLB625TGE_ENCFF846FHX_e1"
+"ENCLB022KPF_ENCFF122SLQ_a2" "ENCLB022KPF_ENCFF428VHR_b2" "ENCLB022KPF_ENCFF568YFJ_c2" "ENCLB022KPF_ENCFF969ZME_d2" "ENCLB022KPF_ENCFF936TOC_e2" "ENCLB625TGE_ENCFF024QBA_a2" "ENCLB625TGE_ENCFF574TXX_b2" "ENCLB625TGE_ENCFF424TRG_c2" "ENCLB625TGE_ENCFF602QHH_d2" "ENCLB625TGE_ENCFF616FUR_e2" 
+)
 
 
 
-    echo "*** start $file1"
-    echo "*** start $file2" >> $logfile
+for myfile in "${all_files[@]}"; do 
 
-    # Daniele params
-#    echo $bwaBin mem -t 16 -M -k 20 $genomeFile ${run}_${nbr}.fastq -o ${run}_${nbr}.sam
-#    $bwaBin mem -t 16 -M -k 20 $genomeFile ${run}_${nbr}.fastq -o ${run}_${nbr}.sam
+#ls -1 $genomeFile $fastqFold/${myfile}.fastq
+    echo "*** start $myfile"
+    echo "*** start $myfile" >> $logfile
 
-            #$ bwa mem -A1 -B4  -E50 -L0  index_path \
-            #    -U mate_R1.fastq.gz ) 2>>mate_R1.log | samtools view -Shb - > mate_R1.bam
+                        # Daniele params
+                    #    echo $bwaBin mem -t 16 -M -k 20 $genomeFile ${run}_${nbr}.fastq -o ${run}_${nbr}.sam
+                    #    $bwaBin mem -t 16 -M -k 20 $genomeFile ${run}_${nbr}.fastq -o ${run}_${nbr}.sam
 
-    echo "$bwaBin mem -A1 -B4  -E50 -L0  $genomeFile ${file1}.fastq | samtools view -Shb - > ${run}.bam"
-    $bwaBin mem -A1 -B4  -E50 -L0  $genomeFile ${file1}.fastq | samtools view -Shb - > ${run}.bam
-    done
-
+                                #$ bwa mem -A1 -B4  -E50 -L0  index_path \
+                                #    -U mate_R1.fastq.gz ) 2>>mate_R1.log | samtools view -Shb - > mate_R1.bam
+#https://hicexplorer.readthedocs.io/en/latest/content/example_usage.html
+    echo "$bwaBin mem -A1 -B4  -E50 -L0  $genomeFile $fastqFold/${myfile}.fastq | samtools view -Shb - > $fastqFold/${myfile}.bam"
+    $bwaBin mem -A1 -B4  -E50 -L0  $genomeFile $fastqFold/${myfile}.fastq | samtools view -Shb - > $fastqFold/${myfile}.bam
 
 done 
 
@@ -68,81 +58,94 @@ echo $end_time >> ${logfile}
 echo "start: $start_time" >> ${logfile}
 echo "end: $end_time" >> ${logfile}
 echo "----- Script ends -----" >> ${logfile}
+
 exit 0
 
 
 #*************** OTHER COMMANDS
+                                                # qc_template.html was missing in /home/marie/.local/lib/python2.7/site-packages/hicexplorer/
+                                                # download from github and copy paste in the folder
+
+                                                #Dekker encode data, read in protocol => restriction enzyme: HindIII AAGCTT
 
 
 
-# qc_template.html was missing in /home/marie/.local/lib/python2.7/site-packages/hicexplorer/
-# download from github and copy paste in the folder
+                                                ## ! wrong order -> SHOULD USE cat NOT MERGE TO AVOID REORDERING
+                                                ##samtools merge hicExpParam_31_32_33_34_1.bam *_1.bam
+                                                ##samtools merge hicExpParam_31_32_33_34_2.bam *_2.bam
+                                                ## hicBuildMatrix --samFiles hicExpParam_31_32_33_34_1.bam hicExpParam_31_32_33_34_2.bam \
+                                                ##                 --outBam GSM2322555_hicExpParam.bam \
+                                                ##                 --binSize 10000 \
+                                                ##                 --restrictionSequence AAGCTT \
+                                                ##                 --outFileName GSM2322555_hicExpParam_10kb.npz \
+                                                ##                --QCfolder GSM2322555_hicExpParam_hicQC > GSM2322555_hicExpParam.log
+                                                ## /home/marie/.local/lib/python2.7/site-packages/hicexplorer/hicBuildMatrix.py", line 652, in main
+                                                ##    "the --reorder option".format(mate1.qname, mate2.qname)
+                                                ##AssertionError: FATAL ERROR SRR4272032.2 SRR4272031.2 Be sure that the sam files have the same read order If using Bowtie2 or Hisat2 add the --reorder option
 
-#Schmitt data restriction enzyme: HindIII AAGCTT
-
-
-
-## ! wrong order -> SHOULD USE cat NOT MERGE TO AVOID REORDERING
-##samtools merge hicExpParam_31_32_33_34_1.bam *_1.bam
-##samtools merge hicExpParam_31_32_33_34_2.bam *_2.bam
-## hicBuildMatrix --samFiles hicExpParam_31_32_33_34_1.bam hicExpParam_31_32_33_34_2.bam \
-##                 --outBam GSM2322555_hicExpParam.bam \
-##                 --binSize 10000 \
-##                 --restrictionSequence AAGCTT \
-##                 --outFileName GSM2322555_hicExpParam_10kb.npz \
-##                --QCfolder GSM2322555_hicExpParam_hicQC > GSM2322555_hicExpParam.log
-## /home/marie/.local/lib/python2.7/site-packages/hicexplorer/hicBuildMatrix.py", line 652, in main
-##    "the --reorder option".format(mate1.qname, mate2.qname)
-##AssertionError: FATAL ERROR SRR4272032.2 SRR4272031.2 Be sure that the sam files have the same read order If using Bowtie2 or Hisat2 add the --reorder option
-
-#rm -f hicExpParam_31_32_33_34_1.bam
-#rm -f hicExpParam_31_32_33_34_2.bam
+                                                #rm -f hicExpParam_31_32_33_34_1.bam
+                                                #rm -f hicExpParam_31_32_33_34_2.bam
 
 #************************************************************
 #********** CONCATENATE THE BAM FILES FROM DIFFERENT RUNS - HiCExplorer parameters
 #************************************************************
 
-#samtools cat -o cat_hicExpParam_31_32_33_34_1.bam SRR*_1.bam
-#samtools cat -o cat_hicExpParam_31_32_33_34_2.bam SRR*_2.bam
+                                                #samtools cat -o cat_hicExpParam_31_32_33_34_1.bam SRR*_1.bam
+                                                #samtools cat -o cat_hicExpParam_31_32_33_34_2.bam SRR*_2.bam
+
+# samtools cat -o $fastqFold/cat_all_HepG2_1.bam $fastqFold/ENCL*1.bam
+# samtools cat -o $fastqFold/cat_all_HepG2_2.bam $fastqFold/ENCL*2.bam
 
 #************************************************************
 #*************** BUILD MATRIX OF A GIVEN BIN SIZE FROM BAM FILES - HiCExplorer parameters
 #************************************************************
 
-# hicBuildMatrix --samFiles cat_hicExpParam_31_32_33_34_1.bam cat_hicExpParam_31_32_33_34_2.bam \
-#                 --outBam GSM2322555_cat_hicExpParam.bam \
-#                 --binSize 10000 \
-#                 --restrictionSequence AAGCTT \
-#                 --outFileName GSM2322555_cat_hicExpParam_10kb.npz \
-#                --QCfolder GSM2322555_cat_hicExpParam_hicQC > GSM2322555_cat_hicExpParam.log
+                        # hicBuildMatrix --samFiles cat_hicExpParam_31_32_33_34_1.bam cat_hicExpParam_31_32_33_34_2.bam \
+                        #                 --outBam GSM2322555_cat_hicExpParam.bam \
+                        #                 --binSize 10000 \
+                        #                 --restrictionSequence AAGCTT \
+                        #                 --outFileName GSM2322555_cat_hicExpParam_10kb.npz \
+                        #                --QCfolder GSM2322555_cat_hicExpParam_hicQC > GSM2322555_cat_hicExpParam.log
 
-# hicBuildMatrix --samFiles cat_hicExpParam_31_32_33_34_1.bam cat_hicExpParam_31_32_33_34_2.bam \
-#                 --outBam GSM2322555_cat_hicExpParam_20kb.bam \
-#                 --binSize 20000 \
+                        # hicBuildMatrix --samFiles cat_hicExpParam_31_32_33_34_1.bam cat_hicExpParam_31_32_33_34_2.bam \
+                        #                 --outBam GSM2322555_cat_hicExpParam_20kb.bam \
+                        #                 --binSize 20000 \
+                        #                 --restrictionSequence AAGCTT \
+                        #                 --outFileName GSM2322555_cat_hicExpParam_20kb.npz \
+                        #                --QCfolder GSM2322555_cat_hicExpParam_hicQC_20kb > GSM2322555_cat_hicExpParam_20kb.log
+
+
+
+# hicBuildMatrix --samFiles $fastqFold/cat_all_HepG2_1.bam $fastqFold/cat_all_HepG2_2.bam \
+#                 --outBam $fastqFold/GSE105381_HepG2_40kb.bam \
+#                 --binSize 40000 \
 #                 --restrictionSequence AAGCTT \
-#                 --outFileName GSM2322555_cat_hicExpParam_20kb.npz \
-#                --QCfolder GSM2322555_cat_hicExpParam_hicQC_20kb > GSM2322555_cat_hicExpParam_20kb.log
+#                 --outFileName $fastqFold/GSE105381_HepG2_40kb.npz \
+#                --QCfolder $fastqFold/GSE105381_HepG2_40kb_hicQC > $fastqFold/GSE105381_HepG2_40kb_hicQC.log
 
 
 #************************************************************
 #*************** CONVERT NPZ.H5 TO DEKKER FORMAT - HiCExplorer parameters
 #************************************************************
 
-#hicExport --inFile GSM2322555_cat_hicExpParam_20kb.npz.h5 \
-#-o hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt --outputFormat dekker
+                                #hicExport --inFile GSM2322555_cat_hicExpParam_20kb.npz.h5 \
+                                #-o hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt --outputFormat dekker
 
 
-hicExport --inFile GSM2322555_cat_hicExpParam_20kb.npz.h5 \
---chrNameList 1 -o hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_chr1_dekker_matrix.txt --outputFormat dekker
-# running
+                                #hicExport --inFile GSM2322555_cat_hicExpParam_20kb.npz.h5 \
+                                #--chrNameList 1 -o hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_chr1_dekker_matrix.txt --outputFormat dekker
+                                # running
 
 
-# -> OK ! - final file: /mnt/etemp/marie/GSE87112/SB_GSM2322555/hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt.gz
-gunzip  /mnt/etemp/marie/GSE87112/SB_GSM2322555/hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt.gz
+                                # -> OK ! - final file: /mnt/etemp/marie/GSE87112/SB_GSM2322555/hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt.gz
+                                #gunzip  /mnt/etemp/marie/GSE87112/SB_GSM2322555/hicExpParam_20kb_matrix/GSM2322555_hicExpParam_20kb_dekker_matrix.txt.gz
 
-hicExport --inFile GSM2322555_cat_hicExpParam_10kb.npz.h5 \
--o hicExpParam_10kb_matrix/GSM2322555_hicExpParam_10kb_dekker_matrix.txt --outputFormat dekker
-# => running
+                                #hicExport --inFile GSM2322555_cat_hicExpParam_10kb.npz.h5 \
+                                #-o hicExpParam_10kb_matrix/GSM2322555_hicExpParam_10kb_dekker_matrix.txt --outputFormat dekker
+                                # => running
+
+#hicExport --inFile $fastqFold/GSE105381_HepG2_40kb.npz.h5 \
+#-o $fastqFold/GSE105381_HepG2_40kb_dekker_matrix.txt --outputFormat dekker
 
 #====================================================================================================================================================================================
 #====================================================================================================================================================================================
@@ -199,20 +202,20 @@ hicExport --inFile GSM2322555_cat_hicExpParam_10kb.npz.h5 \
 #-o danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_dekker_matrix.txt --outputFormat dekker
 
 
-hicExport --inFile GSM2322555_cat_danieleParam_20kb.npz.h5 \
---chrNameList 1 -o danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_chr1_dekker_matrix.txt --outputFormat dekker
+#hicExport --inFile GSM2322555_cat_danieleParam_20kb.npz.h5 \
+#--chrNameList 1 -o danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_chr1_dekker_matrix.txt --outputFormat dekker
 
-# -> OK ! - final file: /mnt/etemp/marie/GSE87112/SB_GSM2322555/SAM_DanieleParam/danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_dekker_matrix.txt.gz
-gunzip  /mnt/etemp/marie/GSE87112/SB_GSM2322555/SAM_DanieleParam/danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_dekker_matrix.txt.gz
+## -> OK ! - final file: /mnt/etemp/marie/GSE87112/SB_GSM2322555/SAM_DanieleParam/danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_dekker_matrix.txt.gz
+#gunzip  /mnt/etemp/marie/GSE87112/SB_GSM2322555/SAM_DanieleParam/danieleParam_20kb_matrix/GSM2322555_danieleParam_20kb_dekker_matrix.txt.gz
 
-hicExport --inFile GSM2322555_cat_danieleParam_10kb.npz.h5 \
--o danieleParam_10kb_matrix/GSM2322555_danieleParam_10kb_dekker_matrix.txt --outputFormat dekker
+#hicExport --inFile GSM2322555_cat_danieleParam_10kb.npz.h5 \
+#-o danieleParam_10kb_matrix/GSM2322555_danieleParam_10kb_dekker_matrix.txt --outputFormat dekker
 
-# ERROR:
-#saving...
-#Traceback (most recent call last):
-#  File "/home/marie/.local/bin/hicExport", line 7, in <module>
-#    main()
+## ERROR:
+##saving...
+##Traceback (most recent call last):
+##  File "/home/marie/.local/bin/hicExport", line 7, in <module>
+##    main()
 #  File "/home/marie/.local/lib/python2.7/site-packages/hicexplorer/hicExport.py", line 198, in main
 #    hic_ma.save_dekker(args.outFileName)
 #  File "/home/marie/.local/lib/python2.7/site-packages/hicexplorer/HiCMatrix.py", line 1010, in save_dekker

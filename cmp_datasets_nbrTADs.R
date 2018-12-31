@@ -33,6 +33,9 @@ plotType <- "svg"
 widthBoxplot <- 10
 heightBoxplot <- 7
 
+myHeight <- ifelse(plotType == "png", 300, 7)
+myWidth <- ifelse(plotType == "png", 300, 7)
+
 strWidthSplit <- 35
 
 binSize <- 40000
@@ -94,6 +97,8 @@ all_nbr_dt <- foreach(ds1 = all_ds, .combine="rbind") %dopar% {
 outFile <- file.path(outFold, "all_nbr_dt.Rdata")
 save(all_nbr_dt, file = outFile)
 cat(paste0("... written: ", outFile, "\n"))
+
+nDS <- length(unique(all_nbr_dt$ds1))
 
 all_nbr_dt <- eval(parse(text = load(outFile)))
 stopifnot(nrow(all_nbr_dt) == (length(intersectChromos) * length(all_ds)))
@@ -180,6 +185,41 @@ for(var_to_plot in all_vars) {
   
   
 }
+
+##### NBR TADs AND TAD SIZE
+
+myx <- all_nbr_dt$nTADs
+myy <- log10(all_nbr_dt$meanSizeTADs)
+
+myxlab <- "# of TADs"
+myylab <- "mean TAD size [log10]"
+
+myTit <- "TAD size vs. nbr of TADs"
+
+mySub <- paste0("(# DS = ", nDS, ")")
+
+outFile <- file.path(outFold, paste0("nbrTADs_vs_TADsize_scatterplot.", plotType))
+do.call(plotType, list(outFile, height=myHeight, width=myWidth))
+
+densplot(x=myx,
+         y=myy,
+         xlab=myxlab,
+         ylab=myylab,
+         pch = 16, cex = 0.7,
+         main = myTit
+)
+mtext(side=3, text = mySub)
+add_curv_fit(x = myx,
+             y = myy,
+             withR2 = FALSE, lty=2, col="darkgray")
+
+addCorr(x=myx,
+        y=myy,
+        bty="n",
+        legPos="bottomright")
+foo <- dev.off()
+cat(paste0("... written: ", outFile, "\n"))
+
 
 
 
