@@ -55,6 +55,14 @@ all_files <- list.files(mainFold, full.names=T, pattern="Rdata")
 all_files_rowSum <- all_files[grepl("_matrixRowSum.Rdata", all_files)]
 
 # for each  chromo -> row sum boxplot
+  var_names <- c(
+    "rowSum"= "Hi-C matrix row sum", 
+    "rowSum_log10"= "Hi-C matrix row sum [log10]", 
+    "rowSumNoOut"= "Hi-C matrix row sum (5-95% quantile)", 
+    "rowSumNoOut_log10" = "Hi-C matrix row sum (5-95% quantile) [log10]", 
+     "matrixDim"= "Hi-C matrix dimension"
+  )
+  
 
 all_chromo <- paste0("chr", c(1:22, "X"))
 chromo="chr1"
@@ -101,14 +109,7 @@ all_chromo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
   
   chromo_DT$dataset_label <- unlist(sapply(as.character(chromo_DT$dataset), function(x) names(ds_mapping)[ds_mapping == x]))
   
-  var_names <- c(
-    "rowSum"= "Hi-C matrix row sum", 
-    "rowSum_log10"= "Hi-C matrix row sum [log10]", 
-    "rowSumNoOut"= "Hi-C matrix row sum (5-95% quantile)", 
-    "rowSumNoOut_log10" = "Hi-C matrix row sum (5-95% quantile) [log10]", 
-     "matrixDim"= "Hi-C matrix dimension"
-  )
-  
+
   for(var_to_plot in c("rowSum", "rowSum_log10", "rowSumNoOut",  "rowSumNoOut_log10", "matrixDim")) {
     
     var_tit <- var_names[var_to_plot]
