@@ -26,41 +26,41 @@ script_name="draw_matrix.R"
 binSizeKb=40
 colToSkip=3
 
-all_chromos=( "chr1" "chr9" "chr21" )
-#all_chromos=( "chr5" )
+#all_chromos=( "chr1" "chr9" "chr21" )
+all_chromos=( "chr5" )
 #all_chromos=( "chr"{1..22} ) 
 
 all_dataset_id=(
-# breast
-#"GSE105697_ENCFF364CWZ_T47D"
-#"GSM1631185_MCF7"
-#"GSM1631185_MCF7"
+## breast
+"GSE105697_ENCFF364CWZ_T47D"
+"GSM1631185_MCF7"
+"GSM1631185_MCF7"
 ## lung
-#"GSE105600_ENCFF852YOE_A549"
-#"GSE105725_ENCFF697NNX_NCIH460"
+"GSE105600_ENCFF852YOE_A549"
+"GSE105725_ENCFF697NNX_NCIH460"
 ## kidney
-#"GSE105465_ENCFF777DUA_Caki2"
-#"GSE105235_ENCFF235TGH_G401"
+"GSE105465_ENCFF777DUA_Caki2"
+"GSE105235_ENCFF235TGH_G401"
 # leukemia
 "GSE63525_K562"
 # prostate
-#"GSE105557_ENCFF270HJX_LNCaP"
-## pancreas
-#"GSE105566_ENCFF358MNA_Panc1"
-## colorectal
-#"GSE105318_ENCFF439QFU_DLD1"
-#"GSE105318_ENCFF714TMN_DLD1_int"
-#"GSE105318_ENCFF714TMN_DLD1_intICE"
-## skin
-#"GSE106022_ENCFF614EKT_RPMI7951"
-#"GSE105491_ENCFF458OWO_SKMEL5"
-## astrocyte cerebellum
-#"GSE105194_ENCFF027IEO_ASTROCEREB"
-#"GSE105194_ENCFF122YID_ASTROCEREB_int"
-#"GSE105194_ENCFF122YID_ASTROCEREB_intICE"
-## astrocyte spinal cord
-#"GSE105957_ENCFF478UBU_ASTROSPINAL"
-#"GSE105957_ENCFF715HDW_ASTROSPINAL_int"
+"GSE105557_ENCFF270HJX_LNCaP"
+# pancreas
+"GSE105566_ENCFF358MNA_Panc1"
+# colorectal
+"GSE105318_ENCFF439QFU_DLD1"
+"GSE105318_ENCFF714TMN_DLD1_int"
+"GSE105318_ENCFF714TMN_DLD1_intICE"
+# skin
+"GSE106022_ENCFF614EKT_RPMI7951"
+"GSE105491_ENCFF458OWO_SKMEL5"
+# astrocyte cerebellum
+"GSE105194_ENCFF027IEO_ASTROCEREB"
+"GSE105194_ENCFF122YID_ASTROCEREB_int"
+"GSE105194_ENCFF122YID_ASTROCEREB_intICE"
+# astrocyte spinal cord
+"GSE105957_ENCFF478UBU_ASTROSPINAL"
+"GSE105957_ENCFF715HDW_ASTROSPINAL_int"
 "GSE105957_ENCFF715HDW_ASTROSPINAL_intICE"
 )
 
@@ -228,8 +228,8 @@ for dataID in "${all_dataset_id[@]}"; do
         exit 0
     fi
 
-    parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/$matrixPrefix{}${matrixSuffix}.png -k $colToSkip -b ${binSizeKb}000 -c {}" -- ${all_chromos[@]}
-    parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/$matrixPrefix{}${matrixSuffix}.png -k $colToSkip -b ${binSizeKb}000 -c {}" -- ${all_chromos[@]}
+    parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/{}_$matrixPrefix{}${matrixSuffix}.png -k $colToSkip -b ${binSizeKb}000 -c {}" -- ${all_chromos[@]}
+    parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/{}_$matrixPrefix{}${matrixSuffix}.png -k $colToSkip -b ${binSizeKb}000 -c {}" -- ${all_chromos[@]}
 
 
     start_positions=( "35280001" )
@@ -239,8 +239,8 @@ for dataID in "${all_dataset_id[@]}"; do
         start_pos="${start_positions[i]}"
         end_pos="${end_positions[i]}"
 
-        parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/$matrixPrefix{}${matrixSuffix}_${start_pos}_${end_pos}.png -k $colToSkip -b ${binSizeKb}000 -c {} -s $start_pos -e $end_pos" -- ${all_chromos[@]}
-        parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/$matrixPrefix{}${matrixSuffix}_${start_pos}_${end_pos}.png -k $colToSkip -b ${binSizeKb}000 -c {} -s $start_pos -e $end_pos" -- ${all_chromos[@]}
+        parallel -i -j $maxJobs -l $maxLoad sh -c "echo Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/{}_$matrixPrefix{}${matrixSuffix}_${start_pos}_${end_pos}.png -k $colToSkip -b ${binSizeKb}000 -c {} -s $start_pos -e $end_pos" -- ${all_chromos[@]}
+        parallel -i -j $maxJobs -l $maxLoad sh -c "Rscript $script_name  -m $matrixFolder/$matrixPrefix{}$matrixSuffix -o $outFolder/{}_$matrixPrefix{}${matrixSuffix}_${start_pos}_${end_pos}.png -k $colToSkip -b ${binSizeKb}000 -c {} -s $start_pos -e $end_pos" -- ${all_chromos[@]}
 
     done # end iterating over positions to plot
 
