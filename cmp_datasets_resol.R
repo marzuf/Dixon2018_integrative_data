@@ -138,7 +138,7 @@ all_chromo_DT <- foreach(chromo = all_chromo, .combine="rbind") %dopar% {
         panel.grid = element_blank(),
         # panel.grid.major = element_line(colour = "lightpink"),
         # strip.text.x = element_text(),
-        axis.text.x = element_text( hjust=1,vjust = 0.5, size=8, angle = 90),
+        axis.text.x = element_text( hjust=1,vjust = 0.5, size=12, angle = 90),
         axis.line.x = element_line(size = .2, color = "black"),
         axis.line.y = element_line(size = .3, color = "black"),
         #    axis.ticks.x = element_blank(),
