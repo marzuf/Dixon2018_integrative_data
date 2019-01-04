@@ -27,8 +27,8 @@ binSizeKb=40
 colToSkip=3
 
 #all_chromos=( "chr1" "chr9" "chr21" )
-all_chromos=( "chr5" )
-#all_chromos=( "chr"{1..22} ) 
+#all_chromos=( "chr5" )
+all_chromos=( "chr"{1..22} ) 
 
 all_dataset_id=(
 ## breast

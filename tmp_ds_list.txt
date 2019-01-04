@@ -1,0 +1,61 @@
+breastConsensusname:	 GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D 
+breastConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP_vs_GSE105697_ENCFF364CWZ_T47D/chr1_conservedTADs.txt 
+mcf7Consensusname:	 GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP 
+mcf7ConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSM1631185_MCF7_vs_GSE75070_MCF7_shGFP/chr1_conservedTADs.txt 
+breastCL1name:	 GSM1631185_GSE66733 
+breastCL1Files[1]:	 breast/MCF7//GSM1631185_GSE66733/MCF7/TopDom/GSM1631185_MCF7_40kb_chr1_final_domains.txt 
+breastCL2name:	 GSM1942100_GSM1942101_GSE75070 
+breastCL2Files[1]:	 breast/MCF7/GSM1942100_GSM1942101_GSE75070/shGFP/TopDom/GSE75070_MCF7_shGFP_40kb_chr1_final_domains.txt 
+breastCL3name:	 ENCSR549MGQ_GSE105697 
+breastCL3Files[1]:	 breast/T47D/ENCSR549MGQ_GSE105697/TopDom/GSE105697_ENCFF364CWZ_T47D_40kb_chr1_final_domains.txt 
+lungConsensusname:	 GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460 
+lungConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSE105600_ENCFF852YOE_A549_vs_GSE105725_ENCFF697NNX_NCIH460/chr1_conservedTADs.txt 
+lungCL1name:	 ENCSR444WCZ 
+lungCL1Files[1]:	 lung/A549/ENCSR444WCZ/TopDom/GSE105600_ENCFF852YOE_A549_40kb_chr1_final_domains.txt 
+lungCL2name:	 ENCSR489OCU 
+lungCL2Files[1]:	 lung/NCI-H460/ENCSR489OCU/TopDom/GSE105725_ENCFF697NNX_NCIH460_40kb_chr1_final_domains.txt 
+pancreasCL1name:	 ENCFF358MNA 
+pancreasCL1Files[1]:	 pancreas/Panc1/GSE105566/ENCFF358MNA/TopDom/GSE105566_ENCFF358MNA_Panc1_40kb_chr1_final_domains.txt 
+prostateCL1name:	 ENCFF270HJX 
+prostateCL1Files[1]:	 prostate/LNCaP/GSE105557/ENCFF270HJX/TopDom/GSE105557_ENCFF270HJX_LNCaP_40kb_chr1_final_domains.txt 
+kidneyCL1name:	 ENCFF777DUA 
+kidneyCL1Files[1]:	 kidney/Caki2/GSE105465/ENCFF777DUA/TopDom/GSE105465_ENCFF777DUA_Caki2_40kb_chr1_final_domains.txt 
+kidneyCL2name:	 ENCFF235TGH 
+kidneyCL2Files[1]:	 kidney/G401/GSE105235/ENCFF235TGH/TopDom/GSE105235_ENCFF235TGH_G401_40kb_chr1_final_domains.txt 
+kidneyConsensusname:	 GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401 
+kidneyConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSE105465_ENCFF777DUA_Caki2_vs_GSE105235_ENCFF235TGH_G401/chr1_conservedTADs.txt 
+skinCL1name:	 ENCFF614EKT 
+skinCL1Files[1]:	 skin/RPMI-7951/GSE106022/ENCFF614EKT/TopDom/GSE106022_ENCFF614EKT_RPMI7951_40kb_chr1_final_domains.txt 
+skinCL2name:	 ENCFF458OWO 
+skinCL2Files[1]:	 skin/SK-MEL-5/GSE105491/ENCFF458OWO/TopDom/GSE105491_ENCFF458OWO_SKMEL5_40kb_chr1_final_domains.txt 
+skinConsensusname:	 GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5 
+skinConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSE106022_ENCFF614EKT_RPMI7951_vs_GSE105491_ENCFF458OWO_SKMEL5/chr1_conservedTADs.txt 
+coloCL1name:	 ENCFF439QFU 
+coloCL1Files[1]:	 colon/DLD1/GSE105318/ENCFF439QFU/TopDom/GSE105318_ENCFF439QFU_40kb_chr1_final_domains.txt 
+astroCL1name:	 ENCFF027IEO 
+astroCL1Files[1]:	 astrocyte/cerebellum/GSE105194/ENCFF027IEO/TopDom/GSE105194_ENCFF027IEO_40kb_chr1_final_domains.txt 
+astroCL3name:	 ENCFF715HDW 
+astroCL3Files[1]:	 astrocyte/spinal_cord/GSE105957/ENCFF715HDW/TopDom/GSE105957_ENCFF715HDW_40kb_chr1_final_domains.txt 
+astroConsensusname:	 GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal 
+astroConsensusFiles[1]:	 FIND_CONSENSUS_TADS/GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal/chr1_conservedTADs.txt 
+pipConsensusname:	 pipeline_TopDom 
+pipConsensusFiles[1]:	 //mnt/ed4/marie/TAD_call_pipeline_TopDom/consensus_TopDom_covThresh_r0.6_t80000_v0_w-1_final/chr1_conservedTADs.txt 
+
+>  1 -  breastCL1 	=	 HiCStein-MCF7-WT__hg19__.+TopDom.matrix 
+>  2 -  breastCL2 	=	 GSE75070_HiCStein-MCF7-shGFP_hg19_.+TopDom.matrix 
+>  3 -  breastCL3 	=	 GSE105697_ENCFF364CWZ 
+>  4 -  lungCL1 	=	 GSE105600_ENCFF852YOE 
+>  5 -  lungCL2 	=	 GSE105725_ENCFF697NNX 
+>  6 -  pancreasCL1 	=	 GSE105566_ENCFF358MNA 
+>  7 -  prostateCL1 	=	 GSE105557_ENCFF270HJX 
+>  8 -  kidneyCL1 	=	 GSE105465_ENCFF777DUA 
+>  9 -  kidneyCL2 	=	 GSE105235_ENCFF235TGH 
+>  10 -  skinCL1 	=	 GSE106022_ENCFF614EKT 
+>  11 -  skinCL2 	=	 GSE105491_ENCFF458OWO 
+>  12 -  coloCL1 	=	 GSE105318_ENCFF439QFU 
+>  13 -  coloCL2 	=	 GSE105318_ENCFF714TMN 
+>  14 -  astroCL1 	=	 GSE105194_ENCFF027IEO 
+>  15 -  astroCL2 	=	 GSE105194_ENCFF122YID 
+>  16 -  astroCL3 	=	 GSE105957_ENCFF715HDW 
+>  17 -  astroCL4 	=	 GSE105957_ENCFF478UBU 
+>  18 -  lympho1 	=	 GSE63525_K562_40kb_ICE 
