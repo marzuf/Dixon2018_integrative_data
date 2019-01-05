@@ -28,6 +28,7 @@ outFold <- file.path("COMPARE_PIPELINE_RESULTS", paste0(ds1, "_", ds2), exprDS)
 system(paste0("mkdir -p ", outFold))
 
 plotType <- "svg"
+plotType <- "png"
 myHeight <- ifelse(plotType == "png", 400, 7)
 myWidth <- ifelse(plotType == "png", 400, 7)
 
@@ -137,9 +138,17 @@ myTit <- paste0(exprDS, ": gene TAD ranking comparison")
 myxlab <- paste0("gene TAD rank ", ds1, " (", length(commonGenes), "/", length(geneList1), ")")
 myylab <- paste0("gene TAD rank ", ds2, " (", length(commonGenes), "/", length(geneList2), ")")
 mySub <- paste0(ds1, " vs. ", ds2)
+
+myxlab <- paste0("gene TAD pval (", length(commonGenes), "/", length(geneList1), ")", "\n", ds1)
+myylab <- paste0("gene TAD pval (", length(commonGenes), "/", length(geneList2), ")", "\n", ds2)
+mySub <- paste0(ds1, " vs.\n", ds2)
+
+
+
 # mySubBot <- paste0("(# intersect genes = ", length(commonGenes), ")")
-outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_gene_tad_rank.", plotType))
+outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_", exprDS, "_gene_tad_rank.", plotType))
 do.call(plotType, list(outFile, height=myHeight, width=myWidth))
+par(mar= par()$mar + c(1,1,1,1))
 plot(x = g2t1_dt_withRank$region_rank,
      y = g2t2_dt_withRank$region_rank,
      xlab=myxlab,
@@ -162,9 +171,9 @@ cat(paste0("... written: ", outFile, "\n"))
 
 ############################################################### density
 
-outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_gene_tad_rank_density.", plotType))
+outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_", exprDS, "_gene_tad_rank_density.", plotType))
 do.call(plotType, list(outFile, height=myHeight, width=myWidth))
-
+par(mar= par()$mar + c(1,1,1,1))
 densplot(x=g2t1_dt_withRank$region_rank,
          y=g2t2_dt_withRank$region_rank,
          xlab=myxlab,
@@ -225,10 +234,11 @@ stopifnot(g2t2_dt_withRank_onlySignif$entrezID == commonSignif)
 ############################################################### density - genes from signif TADs only
 
 mySub <- paste0(ds1, " vs. ", ds2, " (genes from signif. TADs only)")
+mySub <- paste0(ds1, " vs.\n", ds2, " (genes from signif. TADs only)")
 
-outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_gene_tad_rank_density_onlySignifTADs.", plotType))
+outFile <- file.path(outFold, paste0(ds1, "_", ds2, "_", exprDS, "_gene_tad_rank_density_onlySignifTADs.", plotType))
 do.call(plotType, list(outFile, height=myHeight, width=myWidth))
-
+par(mar= par()$mar + c(1,1,1,1))
 densplot(x=g2t1_dt_withRank_onlySignif$region_rank,
          y=g2t2_dt_withRank_onlySignif$region_rank,
          xlab=myxlab,
