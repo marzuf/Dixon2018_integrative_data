@@ -131,10 +131,16 @@ all_auc_DT <- foreach(curr_file = all_ratio_files, .combine='rbind') %dopar% {
 #################################### 
 
 all_comps <- list(
+
+  c("aucFCC", "old_aucFCC"),
+  c("aucCoexprDist", "old_aucCoexprDist"),
+  c("aucCoexprDistSameFam", "old_aucCoexprDistSameFam"),
+
   c("aucFCC", "aucCoexprDist"),
   c("aucFCC", "aucCoexprDistSameFam"),
   c("old_aucFCC", "old_aucCoexprDist"),
   c("old_aucFCC", "old_aucCoexprDistSameFam")
+
 )
 
 i=1
@@ -146,21 +152,47 @@ for( i in seq_along(all_comps) ) {
   myx <- 100*(all_auc_DT[,xvar]-1)
   myy <- 100*(all_auc_DT[,yvar]-1)
   
+  leg_pos <- "topleft"
+  
+  if(grepl("SameFam", xvar) & grepl("SameFam", yvar))
+    leg_pos <- "topright"
+  
+  if(grepl("CoexprDist$", xvar) & grepl("CoexprDist$", yvar))
+    leg_pos <- "topright"
+  
+  if(xvar=="aucFCC" & yvar=="aucCoexprDist")
+    leg_pos <- "topright"
+  
+#  if(grepl("old_", xvar)) {
+#    stopifnot(grepl("old_", yvar))
+#    labpart <- "pipeline TADs"
+#    xvar <- gsub("old_", "", xvar)
+#    yvar <- gsub("old_", "", yvar)
+#    
+#  } else {
+#    labpart <- "tissue TADs"
+#  }
   if(grepl("old_", xvar)) {
-    stopifnot(grepl("old_", yvar))
-    labpart <- "pipeline TADs"
+    labpartX <- "pipeline TADs"
     xvar <- gsub("old_", "", xvar)
-    yvar <- gsub("old_", "", yvar)
-    
   } else {
-    labpart <- "tissue TADs"
+    labpartX <- "tissue TADs"
+  }
+  if(grepl("old_", yvar)) {
+    labpartY <- "pipeline TADs"
+    yvar <- gsub("old_", "", yvar)
+  } else {
+    labpartY <- "tissue TADs"
   }
  
   
-  myTit <- paste0(" % increase AUC\n", xvar, " vs. ", yvar, " (", gsub(" ", "", labpart), ")")
+#  myTit <- paste0(" % increase AUC\n", xvar, " vs. ", yvar, " (", gsub(" ", "", labpart), ")")
+  myTit <- paste0(" % increase AUC\n", xvar, "  (", gsub(" ", "", labpartX), ") vs. ", yvar, " (", gsub(" ", "", labpartY), ")")
   #myTit <- paste0("Tissue-specific consensus vs. pipeline consensus % increase FCC AUC")
-  x_lab <- paste("% increase", xvar, " (", labpart, ")")
-  y_lab <- paste("% increase", yvar, " (", labpart, ")")
+#  x_lab <- paste("% increase", xvar, " (", labpart, ")")
+#  y_lab <- paste("% increase", yvar, " (", labpart, ")")
+  x_lab <- paste("% increase", xvar, " (", labpartX, ")")
+  y_lab <- paste("% increase", yvar, " (", labpartY, ")")
   mySub <- paste0("(# DS = ", nrow(all_auc_DT), ")")
   
   mynames <- all_auc_DT$dataset
@@ -168,7 +200,8 @@ for( i in seq_along(all_comps) ) {
   curr_colors <- as.character(cancer_subColors[as.character(cancer_subAnnot[mynames])])
   stopifnot(!is.na(curr_colors))
   
-  outFile <- file.path(outFold, paste0(xvar, "_", yvar, "_", gsub(" ", "", labpart), ".", plotType))
+#  outFile <- file.path(outFold, paste0(xvar, "_", yvar, "_", gsub(" ", "", labpart), ".", plotType))
+  outFile <- file.path(outFold, paste0(xvar, "_", gsub(" ", "", labpartX),"_", yvar, "_", gsub(" ", "", labpartY), ".", plotType))
   do.call(plotType, list(outFile, height=myHeight, width=myWidth))
   plot(x = myx,
        y = myy,
@@ -189,7 +222,7 @@ for( i in seq_along(all_comps) ) {
           legPos="bottomright", 
           corMet="spearman",
           bty="n") 
-  legend("topleft",
+  legend(leg_pos,
          legend=unique(cancer_subAnnot[mynames]), #names(curr_colors),
          lty=1,
          col = unique(curr_colors),

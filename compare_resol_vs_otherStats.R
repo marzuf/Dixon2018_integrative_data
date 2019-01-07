@@ -25,9 +25,9 @@ dir.create(outFold, recursive = TRUE)
 # if(!SSHFS) system(paste0("rm -f ", logFile))
 # if(SSHFS) logFile <- ""
 
-plotType <- "svg"
+plotType <- "png"
 
-myHeight <- ifelse(plotType=="png", 300, 7)
+myHeight <- ifelse(plotType=="png", 500, 7)
 myWidth <- myHeight
 
 source("utils_fct.R")
@@ -149,6 +149,8 @@ resol_vars <- c( "countSum",
 
 other_vars <- colnames(all_stats_DT)[!colnames(all_stats_DT) %in% c("dataset", resol_vars)]
 
+all_stats_DT$tissues <- as.factor(gsub("(.+)CL.*", "\\1", all_stats_DT$dataset))
+
 var_names <- c(
                    "chromoCover" = "chromosome coverage",
                    "nTADs" = "# of TADs",
@@ -161,12 +163,15 @@ var_names <- c(
                     "countSum_log10" = "sum of contact counts [log10]"  )
 
 
+
 nDS <- length(commonDS)
 
 resolVar = resol_vars[1]
 otherVar = other_vars[1]
 all_corr_dt <- foreach(resolVar = resol_vars, .combine='rbind') %do% {
   resolvar_dt <- foreach(otherVar = other_vars, .combine='rbind') %dopar% {
+    
+    leg_pos <- ifelse(otherVar %in% c("chromoCover", "meanSizeTADs", "nTADs"), "bottomleft", "bottomright")
     
     myx <- all_stats_DT[,resolVar]
     myy <- all_stats_DT[,otherVar]
@@ -190,11 +195,13 @@ all_corr_dt <- foreach(resolVar = resol_vars, .combine='rbind') %do% {
              xlab=myxlab,
              ylab=myylab,
              pch = 16, cex = 0.7,
-             main = myTit
+             main = myTit,
+            col = as.numeric(all_stats_DT[,"tissues"])
     )
     text(x=myx,
          y=myy,
          labels=all_stats_DT[,"dataset"], 
+         col = as.numeric(all_stats_DT[,"tissues"]),
          cex=0.7)  
     mtext(side=3, text = mySub)
     add_curv_fit(x = myx,
@@ -203,7 +210,7 @@ all_corr_dt <- foreach(resolVar = resol_vars, .combine='rbind') %do% {
     addCorr(x=myx,
             y=myy,
             bty="n",
-            legPos="bottomright")
+            legPos=leg_pos)
     
     foo <- dev.off()
     cat(paste0("... written: ", outFile, "\n"))

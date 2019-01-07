@@ -242,7 +242,7 @@ mtext(side=3, text = mySub)
 add_curv_fit(x = g2t1_dt_withPval_onlySignif$region_pval, 
              y=g2t2_dt_withPval_onlySignif$region_pval, withR2 = FALSE, lty=2, col="darkgray")
 
-addCorr(x=g2t2_dt_withPval_onlySignif$region_pval, 
+addCorr(x=g2t1_dt_withPval_onlySignif$region_pval, 
         y = g2t2_dt_withPval_onlySignif$region_pval,
         bty="n",
         legPos="bottomright")
