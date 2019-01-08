@@ -25,7 +25,7 @@ coexprdistOldFolder <-  file.path(
 stopifnot(dir.exists(coexprdistOldFolder))
 
 
-plotType <- "svg"
+plotType <- "png"
 myHeight <- ifelse(plotType == "png", 300, 7)
 myWidth <- myHeight
 myGGheight <- ifelse(plotType == "png", 300, 7)

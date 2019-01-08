@@ -35,11 +35,11 @@ stopifnot(dir.exists(old_fcc_folder))
 fcc_folder <- file.path("PIPELINE", "OUTPUT_FOLDER")
 stopifnot(dir.exists(fcc_folder))
 
-plotType <- "svg"
-myHeight <- ifelse(plotType == "png", 300, 7)
+plotType <- "png"
+myHeight <- ifelse(plotType == "png", 500, 7)
 myWidth <- myHeight
-myGGheight <- ifelse(plotType == "png", 300, 7)
-myGGwidth <- ifelse(plotType == "png", 500, 10)
+myGGheight <- ifelse(plotType == "png", 500, 7)
+myGGwidth <- ifelse(plotType == "png", 700, 10)
 plotCex <- 1.2
 
 outFold <- file.path("CMP_AUC_FCC_COEXPRDIST_PIPELINE_TISSUE")
