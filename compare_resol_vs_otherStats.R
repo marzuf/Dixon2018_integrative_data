@@ -25,12 +25,15 @@ dir.create(outFold, recursive = TRUE)
 # if(!SSHFS) system(paste0("rm -f ", logFile))
 # if(SSHFS) logFile <- ""
 
-plotType <- "png"
+plotType <- "svg"
 
 myHeight <- ifelse(plotType=="png", 500, 7)
 myWidth <- myHeight
 
 source("utils_fct.R")
+
+cexLab <- 1.2
+cexAxis <- 1.2
 
 matchDT <- eval(parse(text = load(file.path(
   "CMP_DATASETS_MATCHING",
@@ -196,7 +199,8 @@ all_corr_dt <- foreach(resolVar = resol_vars, .combine='rbind') %do% {
              ylab=myylab,
              pch = 16, cex = 0.7,
              main = myTit,
-            col = as.numeric(all_stats_DT[,"tissues"])
+            col = as.numeric(all_stats_DT[,"tissues"]),
+       cex.axis = cexAxis, cex.lab = cexLab
     )
     text(x=myx,
          y=myy,

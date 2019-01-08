@@ -1,7 +1,5 @@
 startTime <- Sys.time()
-cat(paste0("> Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile.R\n"))
-
-stop("!!! DON'T USE ME - USE AUC_coexprDist_withFam_sortNoDup_otherTADfile_otherFamFile.R instead \n")
+cat(paste0("> Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile_otherFamFile.R\n"))
 
 options(scipen=100)
 
@@ -71,11 +69,12 @@ scatterFontSizeTitle <- 12
 ### RETRIEVE FROM COMMAND LINE
 
 # Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile.R  <TADlist> <dataset> 
-
 # Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile.R <TADlist> <dataset> <family>
 
 # Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile.R GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal
+# Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile.R GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal hgnc
 
+# Rscript AUC_coexprDist_withFam_sortNoDup_otherTADfile_otherFamFile.R GSE105318_ENCFF439QFU_DLD1 TCGAcoad_msi_mss
 
 #### !!! change for otherTADfile: <<< GENE DATA DO NOT CHANGE
 # retrieve the sameTAD data frame from:
@@ -145,15 +144,28 @@ source(paste0(pipScriptDir, "/", "TAD_DE_utils.R"))
 utilsDir <- paste0(setDir, "/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_coreg")
 source(file.path(utilsDir, "coreg_utils_ggscatterhist.R"))
 
-distFile <- file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_DIST_SORTNODUP/all_dist_pairs.Rdata"))
+# distFile <- file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_DIST_SORTNODUP/all_dist_pairs.Rdata"))
+# stopifnot(file.exists(distFile))
+### UPDATE 08.01.19 => USE TAD LIST SPECIFIC FILES = TISSUE SPECIFIC FILES
+distFile <- file.path("CREATE_DIST_SORTNODUP", curr_TADlist, "all_dist_pairs.Rdata")
 stopifnot(file.exists(distFile))
 
-coexprFile <- file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_COEXPR_SORTNODUP"),  paste0(curr_dataset, "_", corMethod), "coexprDT.Rdata")
+# CHANGED 08.01.19 !!!
+# coexprFile <- file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_COEXPR_SORTNODUP"),  paste0(curr_dataset, "_", corMethod), "coexprDT.Rdata")
+# stopifnot(file.exists(coexprFile))
+coexprFile <- file.path("CREATE_COEXPR_SORTNODUP", curr_TADlist,  paste0(curr_dataset, "_", corMethod), "coexprDT.Rdata")
 stopifnot(file.exists(coexprFile))
 
 sameTADfile <- file.path("CREATE_SAME_TAD_SORTNODUP", curr_TADlist, "all_TAD_pairs.Rdata")
 stopifnot(file.exists(sameTADfile))
 
+# ADDED 08.01.19 to accommodate updated family file
+sameFamFolder <- file.path("CREATE_SAME_FAMILY_SORTNODUP", curr_TADlist)
+# checking the file comes after (iterating over family and family_short)
+stopifnot(dir.exists(sameFamFolder))
+sameFamFile <- file.path(sameFamFolder, paste0(familyData, "_family_all_family_pairs.Rdata")) # at least this one should exist !
+cat("sameFamFile = ", sameFamFile, "\n")
+stopifnot(file.exists(sameFamFile))
 
 dataset_pipDir <- file.path("PIPELINE", "OUTPUT_FOLDER", curr_TADlist, curr_dataset) # used to retrieve gene list
 stopifnot(dir.exists(dataset_pipDir))
@@ -162,8 +174,8 @@ stopifnot(dir.exists(dataset_pipDir))
 
 if(buildTable) {
   
-  cat(paste0("... load DIST data\t", Sys.time(), "\t"))
-  load(file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_DIST_SORTNODUP/all_dist_pairs.Rdata")))
+  cat(paste0("... load DIST data\t", distFile, "\t", Sys.time(), "\t"))
+  load(distFile)
   cat(paste0(Sys.time(), "\n"))
   head(all_dist_pairs)
   nrow(all_dist_pairs)
@@ -172,10 +184,10 @@ if(buildTable) {
   # UPDATE 30.06.2018
   stopifnot(all_dist_pairs$gene1 < all_dist_pairs$gene2)
   
-  cat(paste0("... load TAD data\t", Sys.time(), "\t"))
+  cat(paste0("... load TAD data\t", sameTADfile, "\t", Sys.time(), "\t"))
   ### =>>> CHANGED HERE FOR OTHER TAD FILE !!!
   # load(file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_SAME_TAD_SORTNODUP/all_TAD_pairs.Rdata")))
-  load(file.path("CREATE_SAME_TAD_SORTNODUP", curr_TADlist, "all_TAD_pairs.Rdata"))
+  load(sameTADfile)
   cat(paste0(Sys.time(), "\n"))
   head(all_TAD_pairs)
   nrow(all_TAD_pairs)
@@ -184,8 +196,9 @@ if(buildTable) {
   # UPDATE 30.06.2018
   stopifnot(all_TAD_pairs$gene1 < all_TAD_pairs$gene2)
   
-  cat(paste0("... load COEXPR data\t", Sys.time(), "\t"))
-  load(file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_COEXPR_SORTNODUP"),  paste0(curr_dataset, "_", corMethod), "coexprDT.Rdata"))
+  cat(paste0("... load COEXPR data\t",coexprFile, "\t", Sys.time(), "\t"))
+  # load(file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_COEXPR_SORTNODUP"),  paste0(curr_dataset, "_", corMethod), "coexprDT.Rdata"))
+  load(coexprFile)
   cat(paste0(Sys.time(), "\n"))
   head(coexprDT)
   nrow(coexprDT)
@@ -197,9 +210,10 @@ if(buildTable) {
   
   #============================== RETRIEVE PIPELINE DATA FOR THIS DATASET - USED ONLY FOR GENE LIST
   script0_name <- "0_prepGeneData"
-  pipeline_geneList <- eval(parse(text = load(file.path(dataset_pipDir, script0_name, "pipeline_geneList.Rdata"))))
+  geneFile <- file.path(dataset_pipDir, script0_name, "pipeline_geneList.Rdata")
+  cat(paste0("... load GENELIST file\t",geneFile, "\t", Sys.time(), "\t"))
+  pipeline_geneList <- eval(parse(text = load(geneFile)))
   pipeline_geneList <- as.character(pipeline_geneList)
-  
   
   dataset_dist_pair <- all_dist_pairs[all_dist_pairs$gene1 %in% pipeline_geneList & 
                                         all_dist_pairs$gene2 %in% pipeline_geneList,]
@@ -213,9 +227,7 @@ if(buildTable) {
   head(dataset_TAD_pairs)
   nrow(dataset_TAD_pairs)
   
-  
   # START MERGING DATA 
-  
   cat(paste0("... merge DIST - TAD data\t", Sys.time(), "\t"))
   dataset_dist_TAD_DT <- left_join(dataset_dist_pairs_limit, dataset_TAD_pairs, by=c("gene1", "gene2"))
   cat(paste0(Sys.time(), "\n"))
@@ -238,8 +250,12 @@ for(i_fam in all_familyData) {
   if(buildTable){
     
     
-    cat(paste0("... load FAMILY data\t", Sys.time(), "\t"))
-    load(file.path(setDir, paste0("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_", caller, "/CREATE_SAME_FAMILY_SORTNODUP/", i_fam, "_all_family_pairs.Rdata")))
+    # UPDATE HERE 08.01.19 TO HAVE DATA FROM TISSUE SPECIFIC TAD LIST
+    sameFamFile <- file.path(sameFamFolder, paste0(i_fam, "_all_family_pairs.Rdata"))
+    cat(paste0("... load FAMILY data\t", sameFamFile, "\n", Sys.time(), "\t"))
+    stopifnot(file.exists(sameFamFile))
+    load(sameFamFile)
+    
     cat(paste0(Sys.time(), "\n"))
     head(all_family_pairs)
     nrow(all_family_pairs)
@@ -252,14 +268,11 @@ for(i_fam in all_familyData) {
     head(dataset_family_pairs)
     
     cat(paste0("... merge FAMILY data\t", Sys.time(), "\t"))
-    
     dataset_dist_TAD_fam_DT <- left_join(dataset_dist_TAD_DT, dataset_family_pairs, by=c("gene1", "gene2"))
     cat(paste0(Sys.time(), "\n"))
-    
     dataset_dist_TAD_fam_DT$sameFamily <- ifelse(is.na(dataset_dist_TAD_fam_DT$family), 0, 1)
     
     cat(paste0("... merge COEXPR data\t", Sys.time(), "\t"))
-    
     dataset_dist_TAD_fam_coexpr_DT <- left_join(dataset_dist_TAD_fam_DT, coexprDT, by=c("gene1", "gene2"))
     cat(paste0(Sys.time(), "\n"))
     
@@ -329,7 +342,6 @@ for(i_fam in all_familyData) {
   #***
   
   if(fitMeth == "loess") {
-    
     my_ylab <- paste0("Gene pair coexpression (", corMethod, ", qqnormDT)")
     my_xlab <- paste0("Distance between the 2 genes (kb)")
     my_sub <- paste0(curr_dataset)
@@ -425,12 +437,7 @@ for(i_fam in all_familyData) {
     foo <- dev.off()
     cat(paste0("... written: ", outFile, "\n"))
     
-
-    
-    
-    
     ################################ DO THE SAME FOR SAME FAM SAME TAD VS. SAME FAM DIFF TAD
-    
     
     smooth_vals_sameFamSameTAD <- predict(loess(coexpr ~ dist, data = sameFam_sameTAD_DT), sort(sameFam_sameTAD_DT$dist))
     smooth_vals_sameFamDiffTAD <- predict(loess(coexpr ~ dist, data = sameFam_diffTAD_DT), sort(sameFam_diffTAD_DT$dist))
@@ -549,7 +556,6 @@ for(i_fam in all_familyData) {
     foo <- dev.off()
     cat(paste0("... written: ", outFile, "\n"))
     
-    
     ################################################################ 
     auc_values <- list(
       auc_diffTAD_distVect = auc_diffTAD_distVect,
@@ -565,18 +571,14 @@ for(i_fam in all_familyData) {
       auc_sameFamDiffTAD_obsDist = auc_sameFamDiffTAD_obsDist,
       auc_sameFamSameTAD_obsDist = auc_sameFamSameTAD_obsDist,
       auc_ratio_sameFam_same_over_diff_obsDist = auc_sameFamSameTAD_distVect/auc_sameFamDiffTAD_obsDist
-      
     )
     
     outFile <- file.path(outFold, paste0("auc_values.Rdata"))
     save(auc_values, file = outFile)
     cat(paste0("... written: ", outFile, "\n"))
     
-    
-    
   } else{
     stop("only loess implemented yet\n")
-    
   }
 } # end iterating over family data
   

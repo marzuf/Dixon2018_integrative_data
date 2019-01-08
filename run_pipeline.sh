@@ -3,7 +3,7 @@
 
 
 
-#### run 22.12.2018:
+#### run 22.12.2018: (14 ds)
 
 # GBM
 # ./run_pipeline.sh GSE105194_ENCFF027IEO_astroCerebellum_vs_GSE105957_ENCFF715HDW_astroSpinal TCGAgbm_classical_mesenchymal

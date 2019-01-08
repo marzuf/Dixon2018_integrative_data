@@ -251,7 +251,7 @@ add_curv_fit(x = g2t1_dt_withRank_onlySignif$region_rank,
              y=g2t1_dt_withRank_onlySignif$region_rank, withR2 = FALSE, lty=2, col="darkgray")
 
 addCorr(x=g2t1_dt_withRank_onlySignif$region_rank, 
-        y = g2t1_dt_withRank_onlySignif$region_rank,
+        y = g2t2_dt_withRank_onlySignif$region_rank,
         bty="n",
         legPos="bottomright")
 foo <- dev.off()

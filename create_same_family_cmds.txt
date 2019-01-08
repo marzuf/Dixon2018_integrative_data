@@ -1,0 +1,106 @@
+# for the family data,
+# the way I created the sameFam
+# files was by filtering to take
+# only the genes assigned to TADs (not BOUND) regions
+# => so the family files should be specific to TAD partition
+# and therefore be created for each tissue !!!
+# (as the sameTAD files)
+
+# The following scripts should be run:
+1) Rscript prep_gene_families_TAD_data_otherTADfile.R GSE105318_ENCFF439QFU_DLD1
+# -> (run fast) this creates the following files:
+PREP_GENE_FAMILIES_TAD_DATA/GSE105318_ENCFF439QFU_DLD1/hgnc_entrezID_family_TAD_DT.Rdata
+PREP_GENE_FAMILIES_TAD_DATA/GSE105318_ENCFF439QFU_DLD1/ensembl_entrezID_family_TAD_DT.Rdata
+
+
+These files are then used in 
+2) Rscript create_sameFamily_sortNoDup_otherFamFile.R GSE105318_ENCFF439QFU_DLD1
+# -> (run fast) this creates the following files:
+CREATE_SAME_FAMILY_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/hgnc_family_all_family_pairs.Rdata
+CREATE_SAME_FAMILY_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/hgnc_family_short_all_family_pairs.Rdata
+
+
+# The same should be done for the dist data
+3) Rscript create_dist_sortNoDup_otherTADfile.R GSE105318_ENCFF439QFU_DLD1
+# -> (run slow) this creates the following file:
+CREATE_DIST_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/all_dist_pairs.Rdata
+
+
+# And finally for the coexpression because use (pipeline_geneList.Rdata)
+4) Rscript create_coexpr_sortNoDup_otherTADfile.R GSE105318_ENCFF439QFU_DLD1 TCGAcoad_msi_mss
+# -> this creates the following file:
+
+
+# TO PREPARE ALL FILES NEEDED, 
+all_prep_data_for_AUC_coexprDist.sh
+
+# Then finally the AUC... script can be run using the files created above
+
+########## COMPARISON PREVIOUS VERSIONS:
+
+### FOR THE INPUT DATA
+
+### to compare with:
+# /mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/CREATE_DIST_SORTNODUP/all_dist_pairs.Rdata
+# /mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/CREATE_SAME_FAMILY_SORTNODUP/hgnc_family_all_family_pairs.Rdata
+# /mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/PREP_GENE_FAMILIES_TAD_DATA/hgnc_entrezID_family_TAD_DT.Rdata
+
+genefam0 = eval(parse(text=load("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/PREP_GENE_FAMILIES_TAD_DATA/hgnc_entrezID_family_TAD_DT.Rdata")))
+genefam1 = eval(parse(text=load("PREP_GENE_FAMILIES_TAD_DATA/GSE105318_ENCFF439QFU_DLD1/hgnc_entrezID_family_TAD_DT.Rdata")))        
+                                                                                                                                                                                                                                   
+samefam0 = eval(parse(text=load("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/CREATE_SAME_FAMILY_SORTNODUP/hgnc_family_all_family_pairs.Rdata")))
+samefam1 = eval(parse(text=load("CREATE_SAME_FAMILY_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/hgnc_family_short_all_family_pairs.Rdata")))
+
+dist0 = eval(parse(text=load("/mnt/ed4/marie/scripts/TAD_DE_pipeline_v2_TopDom/CREATE_DIST_SORTNODUP/all_dist_pairs.Rdata")))
+dist1 = eval(parse(text=load("CREATE_DIST_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/all_dist_pairs.Rdata")))
+
+
+### FOR THE RATIO RESULTS
+
+ratio0=eval(parse(text=load("AUC_COEXPRDIST_WITHFAM_SORTNODUP_BEFORE08.01.19_sameTAD_sameFamFile/GSE105318_ENCFF439QFU_DLD1/TCGAcoad_msi_mss_hgnc/hgnc_family_short/auc_values.Rdata")))
+ratio1=eval(parse(text=load("AUC_COEXPRDIST_WITHFAM_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/TCGAcoad_msi_mss_hgnc/hgnc_family_short/auc_values.Rdata")))
+
+ratio0[["auc_diffTAD_distVect"]]; ratio1[["auc_diffTAD_distVect"]]; 
+
+ratio0[["auc_sameTAD_distVect"]]; ratio1[["auc_sameTAD_distVect"]]; 
+
+ratio0[["auc_ratio_same_over_diff_distVect"]]; ratio1[["auc_ratio_same_over_diff_distVect"]]; 
+
+ratio0[["auc_diffTAD_obsDist"]]; ratio1[["auc_diffTAD_obsDist"]]; 
+
+ratio0[["auc_sameTAD_obsDist"]]; ratio1[["auc_sameTAD_obsDist"]]; 
+
+ratio0[["auc_ratio_same_over_diff_obsDist"]]; ratio1[["auc_ratio_same_over_diff_obsDist"]]; 
+
+ratio0[["auc_sameFamDiffTAD_distVect"]]; ratio1[["auc_sameFamDiffTAD_distVect"]]; 
+
+
+ratio0[["auc_sameFamSameTAD_distVect"]]; ratio1[["auc_sameFamSameTAD_distVect"]]; 
+
+ratio0[["auc_ratio_sameFam_same_over_diff_distVect"]]; ratio1[["auc_ratio_sameFam_same_over_diff_distVect"]]; 
+
+ratio0[["auc_sameFamDiffTAD_obsDist"]]; ratio1[["auc_sameFamDiffTAD_obsDist"]]; 
+
+ratio0[["auc_sameFamSameTAD_obsDist"]]; ratio1[["auc_sameFamSameTAD_obsDist"]]; 
+
+ratio0[["auc_ratio_sameFam_same_over_diff_obsDist"]]; ratio1[["auc_ratio_sameFam_same_over_diff_obsDist"]]; 
+
+
+
+stopifnot(ratio0[["auc_diffTAD_distVect"]] == ratio1[["auc_diffTAD_distVect"]]); 
+stopifnot(ratio0[["auc_sameTAD_distVect"]] == ratio1[["auc_sameTAD_distVect"]]); 
+stopifnot(ratio0[["auc_ratio_same_over_diff_distVect"]] == ratio1[["auc_ratio_same_over_diff_distVect"]]); 
+stopifnot(ratio0[["auc_diffTAD_obsDist"]] == ratio1[["auc_diffTAD_obsDist"]]); 
+stopifnot(ratio0[["auc_sameTAD_obsDist"]] == ratio1[["auc_sameTAD_obsDist"]]); 
+stopifnot(ratio0[["auc_ratio_same_over_diff_obsDist"]] == ratio1[["auc_ratio_same_over_diff_obsDist"]]); 
+stopifnot(ratio0[["auc_sameFamDiffTAD_distVect"]] == ratio1[["auc_sameFamDiffTAD_distVect"]]); 
+stopifnot(ratio0[["auc_sameFamSameTAD_distVect"]] == ratio1[["auc_sameFamSameTAD_distVect"]]); 
+stopifnot(ratio0[["auc_ratio_sameFam_same_over_diff_distVect"]] == ratio1[["auc_ratio_sameFam_same_over_diff_distVect"]]); 
+stopifnot(ratio0[["auc_sameFamDiffTAD_obsDist"]] == ratio1[["auc_sameFamDiffTAD_obsDist"]]); 
+stopifnot(ratio0[["auc_sameFamSameTAD_obsDist"]] == ratio1[["auc_sameFamSameTAD_obsDist"]]); 
+stopifnot(ratio0[["auc_ratio_sameFam_same_over_diff_obsDist"]] == ratio1[["auc_ratio_sameFam_same_over_diff_obsDist"]]); 
+
+
+
+alldt0 = eval(parse(text=load("AUC_COEXPRDIST_WITHFAM_SORTNODUP_BEFORE08.01.19_sameTAD_sameFamFile/GSE105318_ENCFF439QFU_DLD1/TCGAcoad_msi_mss_hgnc/hgnc_family_short/allData_dt.Rdata")))
+alldt1 = eval(parse(text=load("AUC_COEXPRDIST_WITHFAM_SORTNODUP/GSE105318_ENCFF439QFU_DLD1/TCGAcoad_msi_mss_hgnc/hgnc_family_short/allData_dt.Rdata")))
