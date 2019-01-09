@@ -13,8 +13,8 @@ if(SSHFS) setwd("~/media/electron/mnt/etemp/marie/Dixon2018_integrative_data")
 
 source("utils_fct.R")
 
-plotType <- "svg"
-myHeight <- ifelse(plotType=="svg", 7, 300) 
+plotType <- "png"
+myHeight <- ifelse(plotType=="svg", 7, 400) 
 myWidth <- myHeight * 1.2 
 
 outFolder <- "CMP_TISSUE_CONSENSUS_FAM"
