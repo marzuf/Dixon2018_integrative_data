@@ -139,8 +139,8 @@ myxlab <- paste0("gene TAD rank ", ds1, " (", length(commonGenes), "/", length(g
 myylab <- paste0("gene TAD rank ", ds2, " (", length(commonGenes), "/", length(geneList2), ")")
 mySub <- paste0(ds1, " vs. ", ds2)
 
-myxlab <- paste0("gene TAD pval (", length(commonGenes), "/", length(geneList1), ")", "\n", ds1)
-myylab <- paste0("gene TAD pval (", length(commonGenes), "/", length(geneList2), ")", "\n", ds2)
+myxlab <- paste0("gene TAD rank (", length(commonGenes), "/", length(geneList1), ")", "\n", ds1)
+myylab <- paste0("gene TAD rank (", length(commonGenes), "/", length(geneList2), ")", "\n", ds2)
 mySub <- paste0(ds1, " vs.\n", ds2)
 
 
